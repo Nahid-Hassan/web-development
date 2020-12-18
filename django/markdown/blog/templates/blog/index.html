@@ -1,0 +1,28 @@
+{% load markdown_extras %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    {% for post_title in post_titles %}
+    <div>
+        <a href="{% url 'home' pk=post_title.pk %}">
+            <li>{{ post_title.title }}</li>
+        </a>
+    </div>
+
+    {% endfor %}
+
+    {{ post_body }}
+
+
+</body>
+
+</html>
