@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+<!-- {% load markdown_extras %} -->
+
+{% block content %}
+
+
+<div id="content">
+    <div id="nav">
+        <h3>Python Basic Tutorial</h3>
+        <ul>
+            {% for post_title in post_titles %}
+            <div>
+                <a href="{% url 'home' pk=post_title.pk %}">
+                    <li>Home - {{ post_title.title }}</li>
+                </a>
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="main">
+        <h2>Home Page</h2>
+        <p>{{ post_body}}</p>
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock content %}

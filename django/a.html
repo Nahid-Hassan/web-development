@@ -1,0 +1,518 @@
+<h1 id="django-web-framework">Django Web Framework</h1>
+<ul>
+<li><a href="#django-web-framework">Django Web Framework</a></li>
+<li><a href="#part-1---getting-started">Part 1 - Getting Started</a></li>
+<li><a href="#part-2---applications-and-routes">Part 2 - Applications and Routes</a></li>
+<li><a href="#part-3---templates">Part 3 - Templates</a></li>
+</ul>
+<h2 id="part-1-getting-started">Part 1 - Getting Started</h2>
+<p>```zsh
+root@admin: ~$ python -m django --version
+3.1
+root@admin: ~$ django-admin 
+Available subcommands:</p>
+<p>[django]
+    check
+    compilemessages
+    createcachetable
+    dbshell
+    diffsettings
+    dumpdata
+    flush
+    inspectdb
+    loaddata
+    makemessages
+    makemigrations
+    migrate
+    runserver
+    sendtestemail
+    shell
+    showmigrations
+    sqlflush
+    sqlmigrate
+    sqlsequencereset
+    squashmigrations
+    startapp
+    startproject
+    test
+    testserver</p>
+<h1 id="now-using-startproject-subcommands-we-create-our-django-project">now using 'startproject' subcommands we create our django project.</h1>
+<h1 id="django-admin-startproject-django_project-django_project-is-the-project-name">django-admin startproject 'django_project' # 'django_project' is the project name.</h1>
+<p>root@admin: ~$ django-admin startproject django_project
+root@admin: ~$ cd django_project
+root@admin: ~$ ls
+django_project manage.py
+root@admin: ~$ tree
+.
+├── django_project
+│   ├── asgi.py
+│   ├── <strong>init</strong>.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py
+```</p>
+<ul>
+<li>The outer <code>django_project/</code> root directory is a container for your project. Its name doesn’t matter to Django; you can rename it to anything you like.</li>
+<li><code>manage.py</code>: A command-line utility that lets you interact with this Django project in various ways. You can read all the details about manage.py in django-admin and manage.py.</li>
+<li>The inner <code>django_project/ directory</code> is the actual Python package for your project. Its name is the Python package name you’ll need to use to import anything inside it (e.g. django_project.urls).</li>
+<li><code>django_project/__init__.py</code>: An empty file that tells Python that this directory should be considered a Python package. If you’re a Python beginner, read more about packages in the official Python docs.</li>
+<li><code>django_project/settings.py</code>: Settings/configuration for this Django project. Django settings will tell you all about how settings work.</li>
+<li><code>django_project/urls.py</code>: The URL declarations for this Django project; a “table of contents” of your Django-powered site. You can read more about URLs in URL dispatcher.</li>
+<li><code>django_project/asgi.py</code>: An entry-point for ASGI-compatible web servers to serve your project. See How to deploy with ASGI for more details.</li>
+<li><code>django_project/wsgi.py</code>: An entry-point for WSGI-compatible web servers to serve your project. See How to deploy with WSGI for more details.</li>
+</ul>
+<p>Now we run our very basic django_project from <code>terminal</code></p>
+<p><code>console
+root@admin: ~$ ls
+django_project manage.py
+root@admin: ~$ python manage.py runserver</code></p>
+<p><strong>Preview</strong> your basic django website:</p>
+<p><img alt="images" src="images/1.png" /></p>
+<h2 id="part-2-applications-and-routes">Part 2 - Applications and Routes</h2>
+<p>First Create our Django <code>application</code> using <code>startapp</code> subcommands</p>
+<p><code>console
+root@admin: ~$ django-admin startapp blog
+root@admin: ~$ tree
+.
+├── blog
+│   ├── admin.py
+│   ├── apps.py
+│   ├── __init__.py
+│   ├── migrations
+│   │   └── __init__.py
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
+├── db.sqlite3
+├── django_project
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py</code></p>
+<p>Now open up my <code>views.py</code> file and write some <code>code</code> into it.</p>
+<p><em>blog/views.py</em>:</p>
+<p>```py
+from django.shortcuts import render
+from django.http import HttpResponse</p>
+<p>def home(request):
+    return HttpResponse('<h1>Blog Home</h1>')
+```</p>
+<p>Then create new python file <code>urls.py</code> inside <code>blog</code> apps.</p>
+<p><code>console
+root@admin: ~$ cd blog
+root@admin: ~$ ls
+__init__.py  admin.py  apps.py  migrations  models.py  tests.py  views.py
+root@admin: ~$ touch urls.py
+root@admin: ~$ ls
+__init__.py  admin.py  apps.py  migrations  models.py  tests.py  urls.py  views.py</code></p>
+<p><em>blog/urls.py</em>:</p>
+<p>```py
+from django.urls import path
+from . import views</p>
+<p>urlpatterns = [
+    # path(route, view, kwargs=None, name=None)
+    path('', views.home, name='blog-home'),
+]
+```</p>
+<p>Now edit our <code>django_project/urls.py</code> for <code>url mapping</code> with <code>blog</code> app <code>urls.py</code></p>
+<p><em>django_project/urls.py</em>:</p>
+<p>```py
+from django.contrib import admin
+from django.urls import path
+from django.urls import include</p>
+<p>urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('blog/',include('blog.urls'))
+]
+```</p>
+<p>Now open our <code>terminal</code> and run our development server.</p>
+<p>```console
+root@admin: ~$ ls
+blog  db.sqlite3  django_project  manage.py
+root@admin: ~$ python manage.py runserver</p>
+<h1 id="you-can-also-pass-port-number-with-dev-server">you can also pass port number with dev-server</h1>
+<p>root@admin: ~$ python manage.py runserver 8080
+Watching for file changes with StatReloader
+Performing system checks...</p>
+<p>System check identified no issues (0 silenced).</p>
+<p>You have 18 unapplied migration(s). Your project may not work properly ......
+Run 'python manage.py migrate' to apply them.
+December 11, 2020 - 15:17:03
+Django version 3.1, using settings 'django_project.settings'
+Starting development server at http://127.0.0.1:8080/
+Quit the server with CONTROL-C.
+```</p>
+<p>Open a browser and put this url <a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a> into the url box and enter.</p>
+<p><strong>main-page</strong>: <a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a></p>
+<p><img alt="images" src="images/2.png" /></p>
+<p><strong>blog-home</strong>: <a href="http://127.0.0.1:8080/blog/">http://127.0.0.1:8080/blog/</a></p>
+<p><img alt="images" src="images/3.png" /></p>
+<p>Add another <code>view</code> into the <code>blog</code> app.</p>
+<p><em>blog/views.py</em>:</p>
+<p>```py
+from django.http import HttpResponse</p>
+<h1 id="_1">......</h1>
+<p>def about(request):
+    return HttpResponse('<h1>About Home</h1>')
+```</p>
+<p>Then, add <code>routes</code> for new view.</p>
+<p><em>blog/urls.py</em>:</p>
+<p>```py
+from django.urls import path
+from . import views</p>
+<p>urlpatterns = [
+    # path(route, view, kwargs=None, name=None)
+    path('', views.home, name='blog-home'),
+    path('about.', views.about, name='blog-about'),
+]
+```</p>
+<p>And then open our <code>terminal</code> and run our development server.</p>
+<p>```console
+root@admin: ~$ python manage.py runserver</p>
+<h1 id="you-can-also-pass-port-number-with-dev-server_1">you can also pass port number with dev-server</h1>
+<p>Watching for file changes with StatReloader
+Performing system checks...</p>
+<p>System check identified no issues (0 silenced).</p>
+<p>You have 18 unapplied migration(s). Your project may not work .........
+Run 'python manage.py migrate' to apply them.
+December 11, 2020 - 15:17:03
+Django version 3.1, using settings 'django_project.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+```</p>
+<p>Open a browser and put this url <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> into the url box and enter.</p>
+<p><strong>blog-home</strong>: <a href="http://127.0.0.1:8000/blog/about/">http://127.0.0.1:8000/blog/about/</a></p>
+<p><img alt="images" src="images/4.png" /></p>
+<p>Now if we make <code>change</code> into our project <code>urls.py</code> like below</p>
+<p><em>django_project/urls.py</em>:</p>
+<p>```py
+from django.contrib import admin
+from django.urls import path
+from django.urls import include</p>
+<p>urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('',include('blog.urls')) # empty route
+]
+```</p>
+<p>Now <code>empty</code> route + <code>empty</code> route. We made <code>views.home</code> is our dev-server homepage.</p>
+<h2 id="part-3-templates">Part 3 - Templates</h2>
+<p>For use templates we are going to create a new folder within the blog app directory create a directory calls <code>templates</code>. By default django looks for a templates subdirectory and each of our installed apps. Inside <code>templates</code> directory we create a subdirectory called <code>blog</code>. Same as apps name.(<em>This is a django convention</em>).</p>
+<p><code>console
+root@admin: ~$ pwd
+../django_project/blog/
+root@admin: ~$ mkdir templates
+root@admin: ~$ cd templates
+root@admin: ~$ mkdir blog
+root@admin: ~$ cd blog
+root@admin: ~$ touch about.html home.html # for our two views
+root@admin: ~$ cd ./../../
+root@admin: ~$ pwd
+../django_project/blog/
+root@admin: ~$ tree
+/templates/
+└── blog
+    ├── about.html
+    └── home.html</code></p>
+<p>Here we create two html files(<code>about.html</code>, <code>home.html</code>) inside <code>blog</code> apps. Now edit it.</p>
+<p><em>blog/templates/blog/home.html</em>:</p>
+<p><code>html
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;title&gt;Django Blog&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Blog Home&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></p>
+<p>Now we have our templates ready. we have to add our blog application to our list of installed apps. So that Django knows to look  there for a templates directory. To doing that, open <code>settings.py</code> file in project_directory and put the app name into the <code>INSTALLED_APPS</code> list.</p>
+<p><em>django_project/settings.py</em>:</p>
+<p>```py
+....
+INSTALLED_APPS = [
+    'blog.apps.BlogConfig',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+....</p>
+<h1 id="blogappsblogconfig-is-the-path-of-our-blog-apps-app-configuration">'blog.apps.BlogConfig' is the path of our blog apps app configuration.</h1>
+<p>"""
+blog/
+    apps.py
+        from django.apps import AppConfig
+        class BlogConfig(AppConfig):
+            name = 'blog'</p>
+<p>"""
+```</p>
+<p>Now lets use the <code>templates</code> that we created so that it renders that whenever we navigate to our home page so in order to do that we have to point our blog <code>views</code> to use those templates. So now open up our blog views and and loading and render our templates. There are several way to do that. Here we use <code>django.shortcut -&gt; render</code> method</p>
+<p><em>blog/views.py</em>:</p>
+<p>```py</p>
+<h1 id="first-import-render-method-from-djangoshortcuts">first import render method from django.shortcuts</h1>
+<p>from django.shortcuts import render</p>
+<h1 id="now-we-return-an-rendered-template-instead-of-our-httpresponse">Now we return an rendered template instead of our HttpResponse</h1>
+<p>def home(request):
+    """
+        render(request, template_name(str), context=dict())</p>
+<pre><code>    request: first_arguments
+    template_name: 'app_name/template_name_that_we_render'            # here app name is blog
+    context: passing information into our template using dictionary.  # context is optional
+"""
+return render(request, 'blog/home.html') # still return an HttpResponse in the background.
+</code></pre>
+<p>```</p>
+<p><strong>Note</strong>: <code>views</code> always return a <code>HttpResponse</code> or an <code>Exception</code>.</p>
+<p>Now check all that's works. Open the terminal and run,</p>
+<p>```console
+root@admin: ~$ ls
+blog  db.sqlite3  django_project  manage.py
+root@admin: ~$ python manage.py runserver 8000
+Watching for file changes with StatReloader
+Performing system checks...</p>
+<p>System check identified no issues (0 silenced).</p>
+<p>You have 18 unapplied migration(s). Your project may not work properly....
+Run 'python manage.py migrate' to apply them.
+December 12, 2020 - 12:58:52
+Django version 3.1, using settings 'django_project.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+```</p>
+<p>Open a browser and put this url <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> into the url box and enter.</p>
+<p><img alt="images" src="images/5.png" /></p>
+<p>Great all works. But we see the same result that we seen before. Wait...<code>view the page source</code>. Ooh! Here is the source code that we write our <code>home.html</code> files.</p>
+<p><img alt="images" src="images/6.png" /></p>
+<p>Now edit our second views template files <code>about.html</code>.</p>
+<p><em>blog/about.html</em>:</p>
+<p><code>html
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;title&gt;Blog About&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+      &lt;h1&gt;Blog About&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></p>
+<p>Next render <code>about.html</code> from our <code>views.py</code> file.</p>
+<p><em>blog/views.py</em>:</p>
+<p><code>py
+def about(request):
+    return render(request, 'blog/about.html')</code></p>
+<p><img alt="images" src="images/7.png" /></p>
+<p>Now work with third and optional <code>parameter</code> in <code>render()</code> method. Create some fake post for  passing into our templates.</p>
+<p>```py</p>
+<h1 id="create-list-of-post-and-each-dictionary-will-be-information-associated-with-one-post">create list of post and each dictionary will be information associated with one post</h1>
+<p>posts = [
+    {
+        'author': 'Md. Nahid Hassan',
+        'title': 'Blog Post 1',
+        'content': 'First Post Content',
+        'date_posted': 'December 10, 2020'
+    },
+    {
+        'author': 'Mehedi Hasan Mahin',
+        'title': 'Blog Post 2',
+        'content': 'Second Post Content',
+        'date_posted': 'December 12, 2020'
+    }
+]
+```</p>
+<p>So lets pretend for now that we made a <code>database call</code> and get back a <code>list of post</code> and we want to display these post on our blog <code>home</code> page. So, we can pass these post into our <code>template</code> just by passing an <code>argument</code> with our data and we will put our data into a <code>dictionary</code>. So within our <code>home</code> view</p>
+<p><em>blog/views.py</em>:</p>
+<p><code>py
+def home(request):
+    context = {
+        # key is post and value is our list of posts
+        # pass context=context as third argument and 
+        # then we are access it using key_name into the template 
+        'posts': posts
+    }
+    return render(request, 'blog/home.html', context=context)</code></p>
+<p>Now let's switch over to our <code>home.html</code> template so we can see how to use this...
+Here we use <code>django_template_engine</code> that allows us to write code here within our templates so to write a for loop. we can open codeblock...</p>
+<p><strong>Loop template example</strong>:</p>
+<p><strong>Demo</strong>:</p>
+<p>```html
+<!-- Demo for loop-->
+{% for something in somethings%}
+<!-- write some code -->
+{% endfor %}</p>
+<!-- Demo for if condition-->
+
+<p>{% if condition %}
+<!-- write some code -->
+{% endif %}</p>
+<!-- Demo for access a variable -->
+
+<p>{{ variable }}
+```</p>
+<p>Now our <code>home.html</code> template,</p>
+<p><code>html
+&lt;h1&gt;Blog Home&lt;/h1&gt;
+&lt;!-- posts is the key of the context dictionary --&gt;
+{% for post in posts %}
+    &lt;h2&gt;{{ post.title }}&lt;/h2&gt;
+    &lt;p&gt;By {{ post.author }} on {{  post.date_posted }}&lt;/p&gt;
+    &lt;p&gt; {{ post.content }} &lt;/p&gt;
+{% endfor %}</code></p>
+<p>Now check all that's works. Open the terminal and run,</p>
+<p>```console
+root@admin: ~$ ls
+blog  db.sqlite3  django_project  manage.py
+root@admin: ~$ python manage.py runserver 8000
+Watching for file changes with StatReloader
+Performing system checks...</p>
+<p>System check identified no issues (0 silenced).</p>
+<p>You have 18 unapplied migration(s). Your project may not work properly....
+Run 'python manage.py migrate' to apply them.
+December 12, 2020 - 12:58:52
+Django version 3.1, using settings 'django_project.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+```</p>
+<p>Open a browser and put this url <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> into the url box and enter.</p>
+<p><img alt="image" src="images/8.png" /></p>
+<p>Now use <code>if</code> into our home.html <code>title</code> tag. Here if we pass a title then this title is shows as our page title if not pass any title then we just use a default of <code>Django blog</code> or something like that. Now make this changes into our templates</p>
+<p>In <em>blog/views.py</em>:</p>
+<p><code>py
+def home(request):
+    context = {
+        'posts': posts,
+        'title': 'Home',
+    }
+    return render(request, 'blog/home.html', context=context)</code></p>
+<p>In <em>blog/home.html</em>:</p>
+<p><code>html
+{% if title %}
+    &lt;title&gt;Django Blog - {{ title }}&lt;/title&gt;
+{% else %}
+    &lt;title&gt;Django Blog&lt;/title&gt;
+{% endif %}</code></p>
+<p>In <em>blog/views.py</em>:</p>
+<p><code>py
+def about(request):
+    # Here {'title':'About'} pass for context parameter
+    return render(request, 'blog/about.html', {'title':'About'})</code></p>
+<p>In <em>blog/about.html</em>:</p>
+<p><code>html
+{% if title %}
+    &lt;title&gt;Django Blog - {{ title }}&lt;/title&gt;
+{% else %}
+    &lt;title&gt;Django Blog&lt;/title&gt;
+{% endif %}</code></p>
+<p><strong>See the effect</strong>:</p>
+<p><img alt="gif" src="images/9.gif" /></p>
+<p>So, we are almost finished up with this tutorial but there is one thing about our templates that isn't very good design right now. So if you notice our home page template and our about page template have a lot of similar <code>repeated code</code>  and that is never good in programming because it means if we want to update one of those sections then we would need to update it in every location so for example if we wanted to change our default title for our website then we would have to make that change in both home and about templates and the more pages that we have with repeated code the <code>worse</code> that problem would be so it would be better to have everything that is repeated in a <code>single place</code> so that there is  only one page to make changes and our home template and about template only contains the information that is <code>unique</code> to those both pages. So to accomplishes this we can  use something called <code>inheritance</code>. so let's see what it's look like...</p>
+<p>So, let's create new template into our <code>template/blog/</code> directory name <code>base.html</code>.</p>
+<p><code>console
+root@admin: ~$ touch base.html</code></p>
+<p>And into the <code>base.html</code> template we put that all the <code>repeated sections</code> between our <code>home</code> and our <code>about</code> template.</p>
+<p><em>blog/base.html</em>:</p>
+<p>```html
+&lt;!DOCTYPE html&gt;
+<html lang="en"></p>
+<p><head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% if title %}
+    <title>Django Blog - {{ title }}</title>
+    {% else %}
+    <title>Django Blog</title>
+    {% endif %}
+</head></p>
+<p><body>
+    {% block content %}
+        <!-- write you code here..... -->
+    {% endblock %}
+</body></p>
+<p></html>
+```</p>
+<blockquote>
+<p>Block Is A Section That Child Templates Can Override</p>
+</blockquote>
+<p>Now in our child templates, first we need to extend <code>parent</code> or <code>base</code> template then open the <code>block content</code>.</p>
+<p><em>blog/home.html</em>:</p>
+<p>```html
+{% extends 'blog/base.html' %}</p>
+<!-- block content start point -->
+
+<p>{% block content %}
+    <h1>Blog Home</h1>
+    <!-- posts is the key of the context dictionary -->
+    {% for post in posts %}
+    <h2>{{ post.title }}</h2>
+    <p>By {{ post.author }} on {{ post.date_posted }}</p>
+    <p>{{ post.content }}</p>
+    {% endfor %}</p>
+<!-- block contend end point -->
+
+<p>{% endblock content %}
+```</p>
+<p><em>blog/about.html</em>:</p>
+<p>```html
+{% extends 'blog/base.html' %}</p>
+<!-- block content start point -->
+
+<p>{% block content %}</p>
+<h1>Blog About</h1>
+
+<!-- block content end point -->
+
+<p>{% endblock content %}
+```</p>
+<blockquote>
+<p>Note: we can add and create multiple block content and add multiple base/parent template into the child template.</p>
+</blockquote>
+<p>So now we have less code in both <code>home</code> and <code>about</code> templates and everything is work like same before we already seen.</p>
+<p>Now add bootstrap into our template for make our blog page more responsive and beautiful.</p>
+<p><code>Bootstrap starter Template</code>: <a href="https://getbootstrap.com/docs/4.3/getting-started/introduction/#starter-template">https://getbootstrap.com/docs/4.3/getting-started/introduction/#starter-template</a></p>
+<p>After adding <code>bootstrap</code> into our <code>base.html</code> template...</p>
+<p>```html
+&lt;!DOCTYPE html&gt;
+<html lang="en"></p>
+<p><head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></p>
+<pre><code>&lt;!-- Bootstrap CSS --&gt;
+&lt;link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"&gt;
+
+{% if title %}
+&lt;title&gt;Django Blog - {{ title }}&lt;/title&gt;
+{% else %}
+&lt;title&gt;Django Blog&lt;/title&gt;
+{% endif %}
+</code></pre>
+<p></head></p>
+<p><body>
+    <div class="container">
+        {% block content %}
+        <!-- write you code here..... -->
+        {% endblock %}
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</body></p>
+<p></html>
+```</p>

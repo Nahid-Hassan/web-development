@@ -1,24 +1,15 @@
 <!-- blog/templates/blog/post_list.html -->
-{% load markdown_extras %}
+{% extends 'blog/base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+{% for post in object_list %}
+<div>
+    <a style='border: 3px solid black' href="{% url 'home' pk=post.pk %}">
+        <li>{{ post.title }}</li>
+    </a>
+</div>
+{% endfor %}
 
-<body>
-    {% for post in object_list %}
-    <div>
-        <a href="{% url 'home' pk=post.pk %}">
-            <li>{{ post.title }}</li>
-        </a>
-    </div>
-    {% endfor %}
 
-</body>
-
-</html>
+{% endblock content %}

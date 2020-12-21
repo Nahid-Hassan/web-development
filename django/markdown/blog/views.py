@@ -13,5 +13,6 @@ def home(request, pk=None, name=None):
     context = {
         'post_titles': Post.objects.all(),
         'post_body': Post.objects.get(pk=pk).body,
+        'title': Post.objects.get(pk=pk).title,
     }
-    return render(request, 'blog/index.html', context=context)
+    return render(request, 'blog/post.html', context=context)

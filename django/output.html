@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="codehilite.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Django Web Framework</h1>
+    <ul>
+        <li><a href="#django-web-framework">Django Web Framework</a></li>
+        <li><a href="#part-1---getting-started">Part 1 - Getting Started</a></li>
+        <li><a href="#part-2---applications-and-routes">Part 2 - Applications and Routes</a></li>
+        <li><a href="#part-3---templates">Part 3 - Templates</a></li>
+    </ul>
+    <h2>Part 1 - Getting Started</h2>
+    <div class="codehilite">
+        <pre><span></span>root@admin: ~$ python -m django --version
+            <span class="m">3</span>.1
+            root@admin: ~$ django-admin
+            Available subcommands:
+
+            <span class="o">[</span>django<span class="o">]</span>
+            check
+            compilemessages
+            createcachetable
+            dbshell
+            diffsettings
+            dumpdata
+            flush
+            inspectdb
+            loaddata
+            makemessages
+            makemigrations
+            migrate
+            runserver
+            sendtestemail
+            shell
+            showmigrations
+            sqlflush
+            sqlmigrate
+            sqlsequencereset
+            squashmigrations
+            startapp
+            startproject
+            <span class="nb">test</span>
+            testserver
+            <span class="c1"># now using &#39;startproject&#39; subcommands we create our django project.</span>
+            <span class="c1"># django-admin startproject &#39;django_project&#39; # &#39;django_project&#39; is the
+                project
+                name.</span>
+            root@admin: ~$ django-admin startproject django_project
+            root@admin: ~$ <span class="nb">cd</span> django_project
+            root@admin: ~$ ls
+            django_project manage.py
+            root@admin: ~$ tree
+            .
+            ├── django_project
+            │   ├── asgi.py
+            │   ├── __init__.py
+            │   ├── settings.py
+            │   ├── urls.py
+            │   └── wsgi.py
+            └── manage.py
+        </pre>
+    </div>
+
+
+    <ul>
+        <li>The outer <code>django_project/</code> root directory is a container for your project. Its name doesn’t
+            matter
+            to Django; you can rename it to anything you like.</li>
+        <li><code>manage.py</code>: A command-line utility that lets you interact with this Django project in various
+            ways.
+            You can read all the details about manage.py in django-admin and manage.py.</li>
+        <li>The inner <code>django_project/ directory</code> is the actual Python package for your project. Its name is
+            the
+            Python package name you’ll need to use to import anything inside it (e.g. django_project.urls).</li>
+        <li><code>django_project/__init__.py</code>: An empty file that tells Python that this directory should be
+            considered a Python package. If you’re a Python beginner, read more about packages in the official Python
+            docs.
+        </li>
+        <li><code>django_project/settings.py</code>: Settings/configuration for this Django project. Django settings
+            will
+            tell you all about how settings work.</li>
+        <li><code>django_project/urls.py</code>: The URL declarations for this Django project; a “table of contents” of
+            your
+            Django-powered site. You can read more about URLs in URL dispatcher.</li>
+        <li><code>django_project/asgi.py</code>: An entry-point for ASGI-compatible web servers to serve your project.
+            See
+            How to deploy with ASGI for more details.</li>
+        <li><code>django_project/wsgi.py</code>: An entry-point for WSGI-compatible web servers to serve your project.
+            See
+            How to deploy with WSGI for more details.</li>
+    </ul>
+    <p>Now we run our very basic django_project from <code>terminal</code></p>
+    <div class="codehilite">
+        <pre><span></span><span class="gp">root@admin: ~$</span> ls
+            <span class="go">django_project manage.py</span>
+            <span class="gp">root@admin: ~$</span> python manage.py runserver
+        </pre>
+    </div>
+
+
+    <p><strong>Preview</strong> your basic django website:</p>
+    <p><img alt="images" src="images/1.png" /></p>
+    <h2>Part 2 - Applications and Routes</h2>
+    <p>First Create our Django <code>application</code> using <code>startapp</code> subcommands</p>
+    <div class="codehilite">
+        <pre><span></span><span class="gp">root@admin: ~$</span> django-admin startapp blog
+            <span class="gp">root@admin: ~$</span> tree
+            <span class="go">.</span>
+            <span class="go">├── blog</span>
+            <span class="go">│   ├── admin.py</span>
+            <span class="go">│   ├── apps.py</span>
+            <span class="go">│   ├── __init__.py</span>
+            <span class="go">│   ├── migrations</span>
+            <span class="go">│   │   └── __init__.py</span>
+            <span class="go">│   ├── models.py</span>
+            <span class="go">│   ├── tests.py</span>
+            <span class="go">│   └── views.py</span>
+            <span class="go">├── db.sqlite3</span>
+            <span class="go">├── django_project</span>
+            <span class="go">│   ├── asgi.py</span>
+            <span class="go">│   ├── __init__.py</span>
+            <span class="go">│   ├── settings.py</span>
+            <span class="go">│   ├── urls.py</span>
+            <span class="go">│   └── wsgi.py</span>
+            <span class="go">└── manage.py</span>
+        </pre>
+    </div>
+
+
+    <p>Now open up my <code>views.py</code> file and write some <code>code</code> into it.</p>
+    <p><em>blog/views.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span
+                class="kn">import</span> <span class="n">render</span>
+            <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span
+                class="n">HttpResponse</span>
+
+            <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span
+                class="n">request</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span
+                class="s1">&#39;&lt;h1&gt;Blog Home&lt;/h1&gt;&#39;</span><span class="p">)</span>
+        </pre>
+    </div>
+
+
+    <p>Then create new python file <code>urls.py</code> inside <code>blog</code> apps.</p>
+    <div class="codehilite">
+        <pre><span></span><span class="gp">root@admin: ~$</span> <span class="nb">cd</span> blog
+            <span class="gp">root@admin: ~$</span> ls
+            <span class="go">__init__.py admin.py apps.py migrations models.py tests.py views.py</span>
+            <span class="gp">root@admin: ~$</span> touch urls.py
+            <span class="gp">root@admin: ~$</span> ls
+            <span class="go">__init__.py admin.py apps.py migrations models.py tests.py urls.py views.py</span>
+        </pre>
+    </div>
+
+
+    <p><em>blog/urls.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span
+                class="kn">import</span>
+            <span class="n">path</span>
+            <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span
+                class="n">views</span>
+
+            <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c1"># path(route, view, kwargs=None, name=None)</span>
+            <span class="n">path</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span
+                class="p">,</span>
+            <span class="n">views</span><span class="o">.</span><span class="n">home</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;blog-home&#39;</span><span
+                class="p">),</span>
+            <span class="p">]</span>
+        </pre>
+    </div>
+
+
+    <p>Now edit our <code>django_project/urls.py</code> for <code>url mapping</code> with <code>blog</code> app
+        <code>urls.py</code></p>
+    <p><em>django_project/urls.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span
+                class="kn">import</span>
+            <span class="n">admin</span>
+            <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span
+                class="n">path</span>
+            <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span
+                class="n">include</span>
+
+            <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">path</span><span class="p">(</span><span class="s1">&#39;admin/&#39;</span><span
+                class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span
+                class="o">.</span><span class="n">urls</span><span class="p">),</span>
+            <span class="n">path</span><span class="p">(</span><span class="s1">&#39;blog/&#39;</span><span
+                class="p">,</span><span class="n">include</span><span class="p">(</span><span
+                class="s1">&#39;blog.urls&#39;</span><span class="p">))</span>
+            <span class="p">]</span>
+        </pre>
+    </div>
+
+
+    <p>Now open our <code>terminal</code> and run our development server.</p>
+    <div class="codehilite">
+        <pre><span></span><span class="gp">root@admin: ~$</span> ls
+            <span class="go">blog db.sqlite3 django_project manage.py</span>
+            <span class="gp">root@admin: ~$</span> python manage.py runserver
+            <span class="gp">#</span> you can also pass port number with dev-server
+            <span class="gp">root@admin: ~$</span> python manage.py runserver <span class="m">8080</span>
+            <span class="go">Watching for file changes with StatReloader</span>
+            <span class="go">Performing system checks...</span>
+
+            <span class="go">System check identified no issues (0 silenced).</span>
+
+            <span class="go">You have 18 unapplied migration(s). Your project may not work properly ......</span>
+            <span class="go">Run &#39;python manage.py migrate&#39; to apply them.</span>
+            <span class="go">December 11, 2020 - 15:17:03</span>
+            <span class="go">Django version 3.1, using settings &#39;django_project.settings&#39;</span>
+            <span class="go">Starting development server at http://127.0.0.1:8080/</span>
+            <span class="go">Quit the server with CONTROL-C.</span>
+        </pre>
+    </div>
+
+
+    <p>Open a browser and put this url <a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a> into the url box and
+        enter.</p>
+    <p><strong>main-page</strong>: <a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a></p>
+    <p><img alt="images" src="images/2.png" /></p>
+    <p><strong>blog-home</strong>: <a href="http://127.0.0.1:8080/blog/">http://127.0.0.1:8080/blog/</a></p>
+    <p><img alt="images" src="images/3.png" /></p>
+    <p>Add another <code>view</code> into the <code>blog</code> app.</p>
+    <p><em>blog/views.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span
+                class="kn">import</span>
+            <span class="n">HttpResponse</span>
+
+            <span class="c1"># ......</span>
+
+            <span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span
+                class="n">request</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span
+                class="s1">&#39;&lt;h1&gt;About Home&lt;/h1&gt;&#39;</span><span class="p">)</span>
+        </pre>
+    </div>
+
+
+    <p>Then, add <code>routes</code> for new view.</p>
+    <p><em>blog/urls.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span
+                class="kn">import</span>
+            <span class="n">path</span>
+            <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span
+                class="n">views</span>
+
+            <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c1"># path(route, view, kwargs=None, name=None)</span>
+            <span class="n">path</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span
+                class="p">,</span>
+            <span class="n">views</span><span class="o">.</span><span class="n">home</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;blog-home&#39;</span><span
+                class="p">),</span>
+            <span class="n">path</span><span class="p">(</span><span class="s1">&#39;about.&#39;</span><span
+                class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">about</span><span
+                class="p">,</span> <span class="n">name</span><span class="o">=</span><span
+                class="s1">&#39;blog-about&#39;</span><span class="p">),</span>
+            <span class="p">]</span>
+        </pre>
+    </div>
+
+
+    <p>And then open our <code>terminal</code> and run our development server.</p>
+    <div class="codehilite">
+        <pre><span></span><span class="gp">root@admin: ~$</span> python manage.py runserver
+            <span class="gp">#</span> you can also pass port number with dev-server
+            <span class="go">Watching for file changes with StatReloader</span>
+            <span class="go">Performing system checks...</span>
+
+            <span class="go">System check identified no issues (0 silenced).</span>
+
+            <span class="go">You have 18 unapplied migration(s). Your project may not work .........</span>
+            <span class="go">Run &#39;python manage.py migrate&#39; to apply them.</span>
+            <span class="go">December 11, 2020 - 15:17:03</span>
+            <span class="go">Django version 3.1, using settings &#39;django_project.settings&#39;</span>
+            <span class="go">Starting development server at http://127.0.0.1:8000/</span>
+            <span class="go">Quit the server with CONTROL-C.</span>
+        </pre>
+    </div>
+
+
+    <p>Open a browser and put this url <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> into the url box and
+        enter.</p>
+    <p><strong>blog-home</strong>: <a href="http://127.0.0.1:8000/blog/about/">http://127.0.0.1:8000/blog/about/</a></p>
+    <p><img alt="images" src="images/4.png" /></p>
+    <p>Now if we make <code>change</code> into our project <code>urls.py</code> like below</p>
+    <p><em>django_project/urls.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span
+                class="kn">import</span>
+            <span class="n">admin</span>
+            <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span
+                class="n">path</span>
+            <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span
+                class="n">include</span>
+
+            <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">path</span><span class="p">(</span><span class="s1">&#39;admin/&#39;</span><span
+                class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span
+                class="o">.</span><span class="n">urls</span><span class="p">),</span>
+            <span class="n">path</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span
+                class="p">,</span><span class="n">include</span><span class="p">(</span><span
+                class="s1">&#39;blog.urls&#39;</span><span class="p">))</span> <span class="c1"># empty route</span>
+            <span class="p">]</span>
+        </pre>
+    </div>
+
+
+    <p>Now <code>empty</code> route + <code>empty</code> route. We made <code>views.home</code> is our dev-server
+        homepage.
+    </p>
+    <h2>Part 3 - Templates</h2>
+    <p>For use templates we are going to create a new folder within the blog app directory create a directory calls
+        <code>templates</code>. By default django looks for a templates subdirectory and each of our installed apps.
+        Inside
+        <code>templates</code> directory we create a subdirectory called <code>blog</code>. Same as apps name.(<em>This
+            is a
+            django convention</em>).</p>
+    <div class="codehilite">
+        <pre><span></span><span class="gp">root@admin: ~$</span> <span class="nb">pwd</span>
+            <span class="go">../django_project/blog/</span>
+            <span class="gp">root@admin: ~$</span> mkdir templates
+            <span class="gp">root@admin: ~$</span> <span class="nb">cd</span> templates
+            <span class="gp">root@admin: ~$</span> mkdir blog
+            <span class="gp">root@admin: ~$</span> <span class="nb">cd</span> blog
+            <span class="gp">root@admin: ~$</span> touch about.html home.html <span class="c1"># for our two
+                views</span>
+            <span class="gp">root@admin: ~$</span> <span class="nb">cd</span> ./../../
+            <span class="gp">root@admin: ~$</span> <span class="nb">pwd</span>
+            <span class="go">../django_project/blog/</span>
+            <span class="gp">root@admin: ~$</span> tree
+            <span class="go">/templates/</span>
+            <span class="go">└── blog</span>
+            <span class="go"> ├── about.html</span>
+            <span class="go"> └── home.html</span>
+        </pre>
+    </div>
+
+
+    <p>Here we create two html files(<code>about.html</code>, <code>home.html</code>) inside <code>blog</code> apps. Now
+        edit it.</p>
+    <p><em>blog/templates/blog/home.html</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+            <span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span
+                class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span
+                class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">/&gt;</span>
+            <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span
+                class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span
+                class="o">=</span><span class="s">&quot;width=device-width, initial-scale=1.0&quot;</span> <span
+                class="p">/&gt;</span>
+            <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Django Blog<span
+                class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Blog Home<span
+                class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+        </pre>
+    </div>
+
+
+    <p>Now we have our templates ready. we have to add our blog application to our list of installed apps. So that
+        Django
+        knows to look there for a templates directory. To doing that, open <code>settings.py</code> file in
+        project_directory and put the app name into the <code>INSTALLED_APPS</code> list.</p>
+    <p><em>django_project/settings.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="o">....</span>
+            <span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;blog.apps.BlogConfig&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="o">....</span>
+            <span class="c1"># &#39;blog.apps.BlogConfig&#39; is the path of our blog apps app configuration.</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+            <span class="sd">blog/</span>
+            <span class="sd"> apps.py</span>
+            <span class="sd"> from django.apps import AppConfig</span>
+            <span class="sd"> class BlogConfig(AppConfig):</span>
+            <span class="sd"> name = &#39;blog&#39;</span>
+
+            <span class="sd">&quot;&quot;&quot;</span>
+        </pre>
+    </div>
+
+
+    <p>Now lets use the <code>templates</code> that we created so that it renders that whenever we navigate to our home
+        page
+        so in order to do that we have to point our blog <code>views</code> to use those templates. So now open up our
+        blog
+        views and and loading and render our templates. There are several way to do that. Here we use
+        <code>django.shortcut
+            -&gt; render</code> method</p>
+    <p><em>blog/views.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="c1"># first import render method from django.shortcuts</span>
+            <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span
+                class="n">render</span>
+
+            <span class="c1"># Now we return an rendered template instead of our HttpResponse</span>
+            <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span
+                class="n">request</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+            <span class="sd"> render(request, template_name(str), context=dict())</span>
+
+            <span class="sd"> request: first_arguments</span>
+            <span class="sd"> template_name: &#39;app_name/template_name_that_we_render&#39; # here app name is
+                blog</span>
+            <span class="sd"> context: passing information into our template using dictionary. # context is
+                optional</span>
+            <span class="sd"> &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span
+                class="n">request</span><span class="p">,</span> <span class="s1">&#39;blog/home.html&#39;</span><span
+                class="p">)</span> <span class="c1"># still return an HttpResponse in the background.</span>
+        </pre>
+    </div>
+
+
+    <p><strong>Note</strong>: <code>views</code> always return a <code>HttpResponse</code> or an <code>Exception</code>.
+    </p>
+    <p>Now check all that's works. Open the terminal and run,</p>
+    <div class="codehilite">
+        <pre><span></span><span class="gp">root@admin: ~$</span> ls
+            <span class="go">blog db.sqlite3 django_project manage.py</span>
+            <span class="gp">root@admin: ~$</span> python manage.py runserver <span class="m">8000</span>
+            <span class="go">Watching for file changes with StatReloader</span>
+            <span class="go">Performing system checks...</span>
+
+            <span class="go">System check identified no issues (0 silenced).</span>
+
+            <span class="go">You have 18 unapplied migration(s). Your project may not work properly....</span>
+            <span class="go">Run &#39;python manage.py migrate&#39; to apply them.</span>
+            <span class="go">December 12, 2020 - 12:58:52</span>
+            <span class="go">Django version 3.1, using settings &#39;django_project.settings&#39;</span>
+            <span class="go">Starting development server at http://127.0.0.1:8000/</span>
+            <span class="go">Quit the server with CONTROL-C.</span>
+        </pre>
+    </div>
+
+
+    <p>Open a browser and put this url <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> into the url box and
+        enter.</p>
+    <p><img alt="images" src="images/5.png" /></p>
+    <p>Great all works. But we see the same result that we seen before. Wait...<code>view the page source</code>. Ooh!
+        Here
+        is the source code that we write our <code>home.html</code> files.</p>
+    <p><img alt="images" src="images/6.png" /></p>
+    <p>Now edit our second views template files <code>about.html</code>.</p>
+    <p><em>blog/about.html</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+            <span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span
+                class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span
+                class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">/&gt;</span>
+            <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span
+                class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span
+                class="o">=</span><span class="s">&quot;width=device-width, initial-scale=1.0&quot;</span> <span
+                class="p">/&gt;</span>
+            <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Blog About<span
+                class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Blog About<span
+                class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+        </pre>
+    </div>
+
+
+    <p>Next render <code>about.html</code> from our <code>views.py</code> file.</p>
+    <p><em>blog/views.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span
+                class="n">request</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span
+                class="n">request</span><span class="p">,</span> <span class="s1">&#39;blog/about.html&#39;</span><span
+                class="p">)</span>
+        </pre>
+    </div>
+
+
+    <p><img alt="images" src="images/7.png" /></p>
+    <p>Now work with third and optional <code>parameter</code> in <code>render()</code> method. Create some fake post
+        for
+        passing into our templates.</p>
+    <div class="codehilite">
+        <pre><span></span><span class="c1"># create list of post and each dictionary will be information associated with
+                one
+                post</span>
+            <span class="n">posts</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span>
+            <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Md. Nahid
+                Hassan&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Blog Post
+                1&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;First Post
+                Content&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;date_posted&#39;</span><span class="p">:</span> <span class="s1">&#39;December 10,
+                2020&#39;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+            <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Mehedi Hasan
+                Mahin&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Blog Post
+                2&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;Second Post
+                Content&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;date_posted&#39;</span><span class="p">:</span> <span class="s1">&#39;December 12,
+                2020&#39;</span>
+            <span class="p">}</span>
+            <span class="p">]</span>
+        </pre>
+    </div>
+
+
+    <p>So lets pretend for now that we made a <code>database call</code> and get back a <code>list of post</code> and we
+        want to display these post on our blog <code>home</code> page. So, we can pass these post into our
+        <code>template</code> just by passing an <code>argument</code> with our data and we will put our data into a
+        <code>dictionary</code>. So within our <code>home</code> view</p>
+    <p><em>blog/views.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span
+                class="n">request</span><span class="p">):</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="c1"># key is post and value is our list of posts</span>
+            <span class="c1"># pass context=context as third argument and </span>
+            <span class="c1"># then we are access it using key_name into the template </span>
+            <span class="s1">&#39;posts&#39;</span><span class="p">:</span> <span class="n">posts</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span
+                class="n">request</span><span class="p">,</span> <span class="s1">&#39;blog/home.html&#39;</span><span
+                class="p">,</span> <span class="n">context</span><span class="o">=</span><span
+                class="n">context</span><span class="p">)</span>
+        </pre>
+    </div>
+
+
+    <p>Now let's switch over to our <code>home.html</code> template so we can see how to use this...
+        Here we use <code>django_template_engine</code> that allows us to write code here within our templates so to
+        write a
+        for loop. we can open codeblock...</p>
+    <p><strong>Loop template example</strong>:</p>
+    <p><strong>Demo</strong>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="c">&lt;!-- Demo for loop--&gt;</span>
+            {% for something in somethings%}
+            <span class="c">&lt;!-- write some code --&gt;</span>
+            {% endfor %}
+
+            <span class="c">&lt;!-- Demo for if condition--&gt;</span>
+            {% if condition %}
+            <span class="c">&lt;!-- write some code --&gt;</span>
+            {% endif %}
+
+            <span class="c">&lt;!-- Demo for access a variable --&gt;</span>
+            {{ variable }}
+        </pre>
+    </div>
+
+
+    <p>Now our <code>home.html</code> template,</p>
+    <div class="codehilite">
+        <pre><span></span><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Blog Home<span
+                class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+            <span class="c">&lt;!-- posts is the key of the context dictionary --&gt;</span>
+            {% for post in posts %}
+            <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>{{ post.title }}<span
+                class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>By {{ post.author }} on
+            {{  post.date_posted }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span> {{ post.content }} <span
+                class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+            {% endfor %}
+        </pre>
+    </div>
+
+
+    <p>Now check all that's works. Open the terminal and run,</p>
+    <div class="codehilite">
+        <pre><span></span><span class="gp">root@admin: ~$</span> ls
+            <span class="go">blog db.sqlite3 django_project manage.py</span>
+            <span class="gp">root@admin: ~$</span> python manage.py runserver <span class="m">8000</span>
+            <span class="go">Watching for file changes with StatReloader</span>
+            <span class="go">Performing system checks...</span>
+
+            <span class="go">System check identified no issues (0 silenced).</span>
+
+            <span class="go">You have 18 unapplied migration(s). Your project may not work properly....</span>
+            <span class="go">Run &#39;python manage.py migrate&#39; to apply them.</span>
+            <span class="go">December 12, 2020 - 12:58:52</span>
+            <span class="go">Django version 3.1, using settings &#39;django_project.settings&#39;</span>
+            <span class="go">Starting development server at http://127.0.0.1:8000/</span>
+            <span class="go">Quit the server with CONTROL-C.</span>
+        </pre>
+    </div>
+
+
+    <p>Open a browser and put this url <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> into the url box and
+        enter.</p>
+    <p><img alt="image" src="images/8.png" /></p>
+    <p>Now use <code>if</code> into our home.html <code>title</code> tag. Here if we pass a title then this title is
+        shows
+        as our page title if not pass any title then we just use a default of <code>Django blog</code> or something like
+        that. Now make this changes into our templates</p>
+    <p>In <em>blog/views.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span
+                class="n">request</span><span class="p">):</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;posts&#39;</span><span class="p">:</span> <span class="n">posts</span><span
+                class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Home&#39;</span><span
+                class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span
+                class="n">request</span><span class="p">,</span> <span class="s1">&#39;blog/home.html&#39;</span><span
+                class="p">,</span> <span class="n">context</span><span class="o">=</span><span
+                class="n">context</span><span class="p">)</span>
+        </pre>
+    </div>
+
+
+    <p>In <em>blog/home.html</em>:</p>
+    <div class="codehilite">
+        <pre><span></span>{% if title %}
+            <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Django Blog -
+            {{ title }}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+            {% else %}
+            <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Django Blog<span
+                class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+            {% endif %}
+        </pre>
+    </div>
+
+
+    <p>In <em>blog/views.py</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span
+                class="n">request</span><span class="p">):</span>
+            <span class="c1"># Here {&#39;title&#39;:&#39;About&#39;} pass for context parameter</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span
+                class="n">request</span><span class="p">,</span> <span class="s1">&#39;blog/about.html&#39;</span><span
+                class="p">,</span> <span class="p">{</span><span class="s1">&#39;title&#39;</span><span
+                class="p">:</span><span class="s1">&#39;About&#39;</span><span class="p">})</span>
+        </pre>
+    </div>
+
+
+    <p>In <em>blog/about.html</em>:</p>
+    <div class="codehilite">
+        <pre><span></span>{% if title %}
+            <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Django Blog -
+            {{ title }}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+            {% else %}
+            <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Django Blog<span
+                class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+            {% endif %}
+        </pre>
+    </div>
+
+
+    <p><strong>See the effect</strong>:</p>
+    <p><img alt="gif" src="images/9.gif" /></p>
+    <p>So, we are almost finished up with this tutorial but there is one thing about our templates that isn't very good
+        design right now. So if you notice our home page template and our about page template have a lot of similar
+        <code>repeated code</code> and that is never good in programming because it means if we want to update one of
+        those
+        sections then we would need to update it in every location so for example if we wanted to change our default
+        title
+        for our website then we would have to make that change in both home and about templates and the more pages that
+        we
+        have with repeated code the <code>worse</code> that problem would be so it would be better to have everything
+        that
+        is repeated in a <code>single place</code> so that there is only one page to make changes and our home template
+        and
+        about template only contains the information that is <code>unique</code> to those both pages. So to accomplishes
+        this we can use something called <code>inheritance</code>. so let's see what it's look like...</p>
+    <p>So, let's create new template into our <code>template/blog/</code> directory name <code>base.html</code>.</p>
+    <div class="codehilite">
+        <pre><span></span><span class="gp">root@admin: ~$</span> touch base.html
+        </pre>
+    </div>
+
+
+    <p>And into the <code>base.html</code> template we put that all the <code>repeated sections</code> between our
+        <code>home</code> and our <code>about</code> template.</p>
+    <p><em>blog/base.html</em>:</p>
+    <div class="codehilite">
+        <pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+            <span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span
+                class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+
+            <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span
+                class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">/&gt;</span>
+            <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span
+                class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span
+                class="o">=</span><span class="s">&quot;width=device-width, initial-scale=1.0&quot;</span> <span
+                class="p">/&gt;</span>
+            {% if title %}
+            <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Django Blog -
+            {{ title }}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+            {% else %}
+            <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Django Blog<span
+                class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+            {% endif %}
+            <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+
+            <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+            {% block content %}
+            <span class="c">&lt;!-- write you code here..... --&gt;</span>
+            {% endblock %}
+            <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+
+            <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+        </pre>
+    </div>
+
+
+    <blockquote>
+        <p>Block Is A Section That Child Templates Can Override</p>
+    </blockquote>
+    <p>Now in our child templates, first we need to extend <code>parent</code> or <code>base</code> template then open
+        the
+        <code>block content</code>.</p>
+    <p><em>blog/home.html</em>:</p>
+    <div class="codehilite">
+        <pre><span></span>{% extends &#39;blog/base.html&#39; %}
+
+            <span class="c">&lt;!-- block content start point --&gt;</span>
+            {% block content %}
+            <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Blog Home<span
+                class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+            <span class="c">&lt;!-- posts is the key of the context dictionary --&gt;</span>
+            {% for post in posts %}
+            <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>{{ post.title }}<span
+                class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>By {{ post.author }} on
+            {{ post.date_posted }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ post.content }}<span
+                class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+            {% endfor %}
+
+            <span class="c">&lt;!-- block contend end point --&gt;</span>
+            {% endblock content %}
+        </pre>
+    </div>
+
+
+    <p><em>blog/about.html</em>:</p>
+    <div class="codehilite">
+        <pre><span></span>{% extends &#39;blog/base.html&#39; %}
+
+            <span class="c">&lt;!-- block content start point --&gt;</span>
+            {% block content %}
+
+            <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Blog About<span
+                class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+
+            <span class="c">&lt;!-- block content end point --&gt;</span>
+            {% endblock content %}
+        </pre>
+    </div>
+
+
+    <blockquote>
+        <p>Note: we can add and create multiple block content and add multiple base/parent template into the child
+            template.
+        </p>
+    </blockquote>
+    <p>So now we have less code in both <code>home</code> and <code>about</code> templates and everything is work like
+        same
+        before we already seen.</p>
+    <p>Now add bootstrap into our template for make our blog page more responsive and beautiful.</p>
+    <p><code>Bootstrap starter Template</code>: <a
+            href="https://getbootstrap.com/docs/4.3/getting-started/introduction/#starter-template">https://getbootstrap.com/docs/4.3/getting-started/introduction/#starter-template</a>
+    </p>
+    <p>After adding <code>bootstrap</code> into our <code>base.html</code> template...</p>
+    <div class="codehilite">
+        <pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+            <span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span
+                class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+
+            <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+            <span class="c">&lt;!-- Required meta tags --&gt;</span>
+            <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span
+                class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span
+                class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span
+                class="o">=</span><span class="s">&quot;width=device-width, initial-scale=1,
+                shrink-to-fit=no&quot;</span><span class="p">&gt;</span>
+
+            <span class="c">&lt;!-- Bootstrap CSS --&gt;</span>
+            <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span
+                class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span
+                class="o">=</span><span
+                class="s">&quot;https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css&quot;</span>
+            <span class="na">integrity</span><span class="o">=</span><span
+                class="s">&quot;sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T&quot;</span>
+            <span class="na">crossorigin</span><span class="o">=</span><span class="s">&quot;anonymous&quot;</span><span
+                class="p">&gt;</span>
+
+            {% if title %}
+            <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Django Blog -
+            {{ title }}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+            {% else %}
+            <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Django Blog<span
+                class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+            {% endif %}
+            <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+
+            <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span
+                class="o">=</span><span class="s">&quot;container&quot;</span><span class="p">&gt;</span>
+            {% block content %}
+            <span class="c">&lt;!-- write you code here..... --&gt;</span>
+            {% endblock %}
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="c">&lt;!-- Optional JavaScript --&gt;</span>
+            <span class="c">&lt;!-- jQuery first, then Popper.js, then Bootstrap JS --&gt;</span>
+            <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span
+                class="o">=</span><span class="s">&quot;https://code.jquery.com/jquery-3.3.1.slim.min.js&quot;</span>
+            <span class="na">integrity</span><span class="o">=</span><span
+                class="s">&quot;sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo&quot;</span>
+            <span class="na">crossorigin</span><span class="o">=</span><span class="s">&quot;anonymous&quot;</span><span
+                class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span
+                class="o">=</span><span
+                class="s">&quot;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js&quot;</span>
+            <span class="na">integrity</span><span class="o">=</span><span
+                class="s">&quot;sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1&quot;</span>
+            <span class="na">crossorigin</span><span class="o">=</span><span class="s">&quot;anonymous&quot;</span><span
+                class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span
+                class="o">=</span><span
+                class="s">&quot;https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js&quot;</span>
+            <span class="na">integrity</span><span class="o">=</span><span
+                class="s">&quot;sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM&quot;</span>
+            <span class="na">crossorigin</span><span class="o">=</span><span class="s">&quot;anonymous&quot;</span><span
+                class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+
+            <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+        </pre>
+    </div>
+</body>
+
+</html>
