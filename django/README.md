@@ -659,5 +659,3 @@ After adding `bootstrap` into our `base.html` template...
 
 </html>
 ```
-
-

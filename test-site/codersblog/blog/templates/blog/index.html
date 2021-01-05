@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if body %}
+<h1>{{ body }}</h1>
+{% endif %}
+
+<p>Image File</p>
+<br>
+<img style="width: 300px; height:200px;" src="{% static 'blog/img/light.jpg' %}" alt="">
+
+<script>
+    sayHello("Nahid");
+    document.write("<br>");
+    sayHello("Mahin");
+</script>
+
+{% endblock content %}
