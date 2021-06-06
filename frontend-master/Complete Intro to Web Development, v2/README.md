@@ -25,6 +25,7 @@
       - [CSS Specificity](#css-specificity)
       - [CSS Box Model](#css-box-model)
       - [CSS Floats and Flexbox](#css-floats-and-flexbox)
+      - [Effective Patterns for Coding in CSS](#effective-patterns-for-coding-in-css)
 
 ### Web Development Tools
 
@@ -609,7 +610,13 @@ This will make everything use the `border-box` sizing instead of the default one
 
 **Justify Content**:
 
+-  By default, the `justify-content` is `flex-start` which is like `left-justified`.
+
+- This one puts the first on the left most and the last on the right most. It then aims to space out the items in the middle equally. Very useful for laying out columns on your web page. The last two are space-around and space-evenly. I'm just showing you space-around but space-evenly is very similar. Feel free to read more into it if you're interested.
+
 ```html
+<style>
+
 <style>
   /* justify-content */
   .jc {
@@ -619,8 +626,222 @@ This will make everything use the `border-box` sizing instead of the default one
   }
 </style>
 ```
-
 **Align Items**:
 
 ```html
+<style>
+  /* align-items */
+  .ai {
+    /* flex-end, flex-start, center */
+    align-items: stretch;
+    height: 250;
+  }
+</style>
 ```
+
+**Flexing** in one place......
+
+```html
+<body>
+  <style>
+    .box-1 {
+      border: 1px solid black;
+      color: white;
+      background-color: blue;
+      height: 150px;
+      width: 300px;
+    }
+    .box-2 {
+      border: 1px solid black;
+      color: white;
+      background-color: red;
+      height: 100px;
+      width: 300px;
+    }
+    .box-3 {
+      border: 1px solid black;
+      color: white;
+      background-color: green;
+      height: 200px;
+      width: 100px;
+    }
+
+    /* display flex */
+    .flex-container {
+      /* flex-inline */
+      display: flex;
+      width: 100%;
+      border: 1px solid black;
+    }
+    /* flex-direction */
+    .reverse {
+      /* column-reverse, column */
+      flex-direction: row;
+    }
+    /* justify-content */
+    .jc {
+      /* default: flex-start */
+      /* other: center, flex-end, space-between, space-around */
+      justify-content: space-around;
+    }
+    /* align-items */
+    .ai {
+      /* flex-end, flex-start, center */
+      align-items: center;
+      height: 250;
+    }
+
+    /* remove the height from the three boxes */
+    .no-height {
+      /* 
+      height: 100% will match the height of the element's parent, regardless of the parent's height value.
+
+      height: inherit will, as the name implies, inherit the value from it's parent. If the parent's value is height: 50%, then the child will also be 50% of the height of it's parent. If the parent's size is defined in absolute values (e.g. height: 50px), then height: inherit and height: 100% will have the same behavior for the child.
+       */
+      height: inherit;
+    }
+
+    /* higher order push right 
+     * if you use row-reverse or column reverse as direction than 
+     * higher order push left. 
+    */
+    .box-2 {
+      align-self: end;
+      order: 5;
+    }
+
+    .box-1 {
+      align-self: end;
+      order: 4;
+    }
+
+    .box-3 {
+      align-self: end;
+      order: 3;
+    }
+  </style>
+
+  <div class="flex-container ai jc reverse">
+    <div class="box box-1">Box-1</div>
+    <div class="box box-2">Box-2</div>
+    <div class="box box-3">Box-3</div>
+  </div>
+</body>
+```
+
+**Note**: See `CSS Tricks` for **Flexbox**.
+
+#### Effective Patterns for Coding in CSS
+
+- Using `<link>`
+- The key here is the `<link rel="stylesheet" href="./style.css" />`. Let's break it down. A `link tag` is nearly always found in the `head` and links another file to that HTML document. Nearly always (99.9% of the time), it's to a stylesheet, hence the `rel="stylesheet"`. The href is where that other file is located. It refers to the file name. In this case, we have a file called style.css and it is located in the same folder as the index.html file, which is what the `./` part of the `./style.css` means. You could also write it as `"style.css"` if it's in the same directory, it also means it's located in the same folder, but I wanted you to see the `./ because you'll see it everywhere`. We'll cover how it works later when we start working more with the **terminal**.
+
+```html
+<!-- linking -->
+<link rel="stylesheet" href="effective-pattern.css" />
+```
+
+**When to Actually Use the Cascade**:
+
+Before I told you to use the cascade as little as possible, but I did want to share with you when it can be useful to use. Imagine we have the following **three buttons**:
+
+`./scripts-and-codes/effective-pattern.css`
+
+```css
+.ex-btn {
+    background-color: #eee;
+    border: 2px solid #aaa;
+    padding: 4px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 17px;
+    cursor: pointer; /*Changes the mouse when hover the mouse*/
+}
+
+.ex-btn-warn {
+    /* inherits from .ex-btn */
+    color: white;
+    background-color: crimson;
+    border-color: darkred;
+}
+
+.ex-btn-success {
+    /* inherits from .ex-btn */
+    color: white;
+    background-color: limegreen;
+    border-color: green;
+}
+```
+
+`./scripts-and-codes/effective-pattern.html`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- linking -->
+    <link rel="stylesheet" href="effective-pattern.css">
+
+</head>
+<body>
+    <button class="ex-btn">Default Button</button>
+    <button class="ex-btn ex-btn-warn">Warning Button</button>
+    <button class="ex-btn ex-btn-success">Success Button</button>
+</body>
+</html>
+```
+
+![images](images/7.png)
+
+
+These buttons are relatively similar and differ only in colors but the spacing and text styling are all the same. It'd be nice if we could write the common styles in one rule and then overrule just the colors. We can, using the cascade!
+
+Since those classes come lower on the page, they "win" on the properties that they conflict with, and thus we only overwrite the things we want. Why is this better? Imagine later you want to change the text to be smaller and the border to be thinner. Now instead of having to change the style for each button, you change it once in their common class, .ex-btn and that affects all of them! This principle is generally called DRY which stands for "don't repeat yourself", meaning if you can have one place for common code or rules, it's better to do that than have it in 50 different places. While having three copies of the same rules doesn't seem like a big deal, many websites will have 10+ sorts of buttons and it quickly becomes impossible to manage.
+
+**Project**:
+
+**Newly Tricky Things I learn**:
+
+- Section and Div Pretty Same
+- `section.row*2` gives you `2` `section` tag with class row
+- `li.nav-item*5>text` give `5` `list` tag with class nav item and content `text`.
+- For multi cursor selection hold `alt` key and point each position using your mouse. 
+- `ctrl + Right Arrow` shift all the cursor after the word. 
+
+```css
+.box-1 {
+  width: 25%;
+}
+.box-2 {
+  width: 50%;
+}
+.box-3 {
+  width: 25%;
+}
+
+/* same as */
+.box-1 {
+  flex: 1;
+}
+.box-2 {
+  flex: 2;
+}
+.box-3 {
+  flex: 1;
+}
+```
+
+> **Full Code**: `./scripts-and-code/project-index-html-css.html` and `./scripts-and-code/project-index-html-css.css`
+
+**Flexbox Resources**:
+
+Search on **Google**,
+
+1. CSS Tricks
+2. Flexbox Froggy
+3. Flexbox Zombies
