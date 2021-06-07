@@ -26,6 +26,18 @@
       - [CSS Box Model](#css-box-model)
       - [CSS Floats and Flexbox](#css-floats-and-flexbox)
       - [Effective Patterns for Coding in CSS](#effective-patterns-for-coding-in-css)
+    - [Learning JavaScript](#learning-javascript)
+      - [Programming Fundamentals](#programming-fundamentals)
+      - [Numbers, Strings and Booleans](#numbers-strings-and-booleans)
+      - [Control Flow](#control-flow)
+      - [Loops](#loops)
+      - [Functions](#functions)
+      - [Scope](#scope)
+      - [Builtins](#builtins)
+    - [Objects](#objects)
+      - [Context](#context)
+      - [Arrays](#arrays)
+      - [Document Object Model(DOM)](#document-object-modeldom)
 
 ### Web Development Tools
 
@@ -610,14 +622,13 @@ This will make everything use the `border-box` sizing instead of the default one
 
 **Justify Content**:
 
--  By default, the `justify-content` is `flex-start` which is like `left-justified`.
+- By default, the `justify-content` is `flex-start` which is like `left-justified`.
 
 - This one puts the first on the left most and the last on the right most. It then aims to space out the items in the middle equally. Very useful for laying out columns on your web page. The last two are space-around and space-evenly. I'm just showing you space-around but space-evenly is very similar. Feel free to read more into it if you're interested.
 
 ```html
 <style>
-
-<style>
+  <style>
   /* justify-content */
   .jc {
     /* default: flex-start */
@@ -626,6 +637,7 @@ This will make everything use the `border-box` sizing instead of the default one
   }
 </style>
 ```
+
 **Align Items**:
 
 ```html
@@ -749,27 +761,27 @@ Before I told you to use the cascade as little as possible, but I did want to sh
 
 ```css
 .ex-btn {
-    background-color: #eee;
-    border: 2px solid #aaa;
-    padding: 4px 15px;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 17px;
-    cursor: pointer; /*Changes the mouse when hover the mouse*/
+  background-color: #eee;
+  border: 2px solid #aaa;
+  padding: 4px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 17px;
+  cursor: pointer; /*Changes the mouse when hover the mouse*/
 }
 
 .ex-btn-warn {
-    /* inherits from .ex-btn */
-    color: white;
-    background-color: crimson;
-    border-color: darkred;
+  /* inherits from .ex-btn */
+  color: white;
+  background-color: crimson;
+  border-color: darkred;
 }
 
 .ex-btn-success {
-    /* inherits from .ex-btn */
-    color: white;
-    background-color: limegreen;
-    border-color: green;
+  /* inherits from .ex-btn */
+  color: white;
+  background-color: limegreen;
+  border-color: green;
 }
 ```
 
@@ -778,26 +790,24 @@ Before I told you to use the cascade as little as possible, but I did want to sh
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
     <!-- linking -->
-    <link rel="stylesheet" href="effective-pattern.css">
-
-</head>
-<body>
+    <link rel="stylesheet" href="effective-pattern.css" />
+  </head>
+  <body>
     <button class="ex-btn">Default Button</button>
     <button class="ex-btn ex-btn-warn">Warning Button</button>
     <button class="ex-btn ex-btn-success">Success Button</button>
-</body>
+  </body>
 </html>
 ```
 
 ![images](images/7.png)
-
 
 These buttons are relatively similar and differ only in colors but the spacing and text styling are all the same. It'd be nice if we could write the common styles in one rule and then overrule just the colors. We can, using the cascade!
 
@@ -810,8 +820,8 @@ Since those classes come lower on the page, they "win" on the properties that th
 - Section and Div Pretty Same
 - `section.row*2` gives you `2` `section` tag with class row
 - `li.nav-item*5>text` give `5` `list` tag with class nav item and content `text`.
-- For multi cursor selection hold `alt` key and point each position using your mouse. 
-- `ctrl + Right Arrow` shift all the cursor after the word. 
+- For multi cursor selection hold `alt` key and point each position using your mouse.
+- `ctrl + Right Arrow` shift all the cursor after the word.
 
 ```css
 .box-1 {
@@ -845,3 +855,558 @@ Search on **Google**,
 1. CSS Tricks
 2. Flexbox Froggy
 3. Flexbox Zombies
+
+### Learning JavaScript
+
+#### Programming Fundamentals
+
+**What is code?**:
+
+A dumb question but its answer may surprise you. `Code is for humans first and computers second`. You can think of writing code as essentially writing notes on how to solve a particular problem that just happens to be in a way that computer can understand it.
+
+Wait, why? The why is because you or someone else will have to go back and re-read that code some time in the future, maybe tomorrow or maybe in ten years (I've worked on code older than 10 years old, it's not fun.) As such, `it's important to write code in a such way that it's easily understandable to someone with little context`. You will spend far longer maintaining this code than you will writing it the first time. Be explicit. Be deliberate. The point here is not to be clever but to be simple and to communicate clearly. **Code is communication.**
+
+Okay, given this, let's frame how this code works then. When you write code, the computer breaks it down into smaller pieces it can understand and then executes those one bit at a time. With JavaScript, only one thing is ever happening at a time (this is called being **single threaded** but that is not a term you need to know.) In general, this means it executes line 1, then line 2, then line 3, etc.
+
+```js
+const monthlyRent = 500;
+
+const yearlyRent = monthlyRent * 12;
+console.log(yearlyRent);
+```
+
+**Output**:
+
+```text
+6000
+Undefined
+```
+
+The first thing that happens above is that we **declare a variable**, `monthlyRent`. The **const** keyword is how we let JavaScript know we're declaring a variable. Variable names always have to know no spaces in them, which is why we squish the words `"monthly rent"` together. In order to make this more readable, we use what's called camel casing, so-called because the capital letters in the middle make it look like humps on a camel. You can also use other styles of capitalization, there's no rule it must be camel case in JavaScript; everyone just happens to do camel casing in JavaScript.
+
+Notice the `;` at the end of every line. `This semi colon lets JavaScript know you've completed your thought`. Think of this as the period/full-stop of the the programming world.
+
+`Variable can be called almost anything. You can't use keywords.` An example would be `const const = 15`. const is a keyword so it can't be used as a variable name. You do want to give your variables good names. `Imagine we have a huge file and 200 lines below we see the variable named monthlyRent`: we'll know instantly what this variable does and we won't have to go try to read the code to figure it out. Always, always, `always use good variable names`. Seriously. Put time into it. Naming things is hard and it's a big part of your job.
+
+Okay, so after line one, I have a variable named `monthlyRent` that I can use as much as I want. In this case, it represents the number of 500 but it also semantically represents `monthlyRent`. Imagine if I had 1000 lines between where `monthlyRent` is declared and where yearlyRent is calculated. I could have just put 500 directly in yearlyRent but I don't because I now understand how that's calculated just by reading the code. Use variables. Use them everywhere. It makes your code way easier to read. Also, later, if my monthly rent changes, I can change it one place and everywhere I reference `monthlyRent` gets updated automatically. Powerful stuff.
+
+Okay, I think calculate yearlyRent. I use the _ to represent multiplication. I'm also mixing variables and numbers which is just fine. I also could have said const `yearlyRent = monthlyRent _ monthsInAYear;` (assuming I put const monthsInAYear = 12; somewhere else) too and that would be a good idea. I would argue the two are roughly the same since it's obvious there are 12 months in a year. But you do what you think is most clear. That's your job.
+
+`console.log(yearlyRent);` is going to print whatever is stored in yearlyRent to the JavaScript console. The JavaScript Console is a part of the dev tools. If you need help finding them, see here. We'll explain how it works in a bit but for now just know that anything you put between the **parenthesis's** gets logged out to your JavaScript console.
+
+Let's get this little snippet working in our browser. Make a new folder (I'll just a put it on my desktop) and add an index.html file with the following in it:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>JavaScript Experiments</title>
+  </head>
+  <body>
+    <h1>JavaScript Experiments!</h1>
+    <script src="./experiments.js"></script>
+  </body>
+</html>
+```
+
+That script tag is going to let us load JavaScript code into out HTML page. So make another file in the same folder called `experiments.js` (it really can be called anything as long as the script tag matches it.) Then in the that JS file put our code from above:
+
+```js
+const monthlyRent = 500;
+
+const yearlyRent = monthlyRent * 12;
+console.log(yearlyRent);
+```
+
+```text
+6000
+undefined
+```
+
+#### Numbers, Strings and Booleans
+
+**Strings**:
+
+- The first way is the old way. We can use the + to tell JavaScript to connect two strings. Notice how we have insert the space between `firstName` and `lastName`. The computer only does exactly what you tell it to do. If you don't insert that space, it doesn't get put there.
+
+- The second line is the new way of doing this. JavaScript got a large update in 2015 and it made things a lot easier. Now you can use the back tick (notice the first uses a double quote, you must use back ticks to do **template** strings) to do template strings. If you do that, anything inside of `${yourVariableHere}` gets output in the string. Cool, right?
+
+```js
+// strings
+const myName = "Md. Nahid Hassan";
+console.log(myName);
+
+// concatenation
+const firstName = "Md. Nahid";
+const lastName = "Hassan";
+
+// direct concatenation
+const sentence = "Hello " + firstName + " " + lastName + "! How are you?";
+
+// Templates
+// `  ${variableName}  `
+// `` called backtick
+const sentenceWithTemplate = `Hello ${firstName} ${lastName}! How are you?`;
+
+console.log(sentence);
+console.log(sentenceWithTemplate);
+```
+
+**Booleans**:
+
+- `true` and `false`
+
+Sometimes you just need a simple **true** or **false**. These are where booleans are useful. Something like a light switch's state is best represented by a boolean. A light is either on (true) or off (false). You'd have something like `const lightIsOn = true;`. Useful and you'll see them everywhere.
+
+**Number**:
+
+Some languages separate **integers** (whole numbers, like `1, 2, 3, 4, 500, 1000`) and **floats** (`1.2, 3.14159, 14.01`, etc.) differently but not JavaScript. JavaScript just has one type of number, Number. A number is a number.
+
+#### Control Flow
+
+```js
+// Example - 1
+const skyIsBlue = true;
+
+if (skyIsBlue) {
+  console.log("The sky is blue.");
+} else {
+  console.log("The sky is not blue.");
+}
+
+// Example - 2
+if (2 + 2 === 4) {
+  console.log(
+    "Oh thank god, the fundamental principles of mathematics still hold true."
+  );
+} else {
+  console.log("Uh, panic?");
+}
+```
+
+You can put any expression (a technical terms, means anything you can stick on the right side of an equal sign, we'll explore it more as we go) inside of the if statement. In this case, we are asking, is two plus two still equal to four. If this is true (I hope so) then again the first block will be run. If not, the second will be.
+
+Let's talk about `===` for a second. If you use just one `=` in JavaScript, it means is `assigned to`. So when we have `const isBrianCool = true;` you can verbalize that as "The variable isBrianCool is assigned to true". Thus we can't use that inside of the if statement because that's not we mean. We're trying to ask a question, not assign something. We're trying to ask "is two plus two equal to four." Enter the triple equals. Triple equals is the same as asking "is this equal to that." We use the triple equals instead of the double equals because double equals does a lot of funny business that usually we don't want it to do. It does what's called coercion and we'll talk about that below. But in an example 2 == "2" but it does not 2 === "2". String 2 is double equal to number 2 but string 2 is not triple equal to number 2.
+
+There's also `!==`. This is asking `"is this not equal to that"`. Lastly you can ask with numbers `>` `>=` `<` `<=` as well to ask if numbers less than or greater than too. For another example:
+
+```js
+const friendsAtYourParty = 10;
+
+if (friendsAtYourParty === 0) {
+  console.log("Cool, now I have a lot of nachos to myself.");
+} else if (friendsAtYourParty >= 4) {
+  console.log("Perfect amount to play some Mario Kart.");
+} else {
+  console.log("Wooooo turn on the dance music!");
+}
+```
+
+#### Loops
+
+Okay so now what if I want do one thing multiple times? I could do something like this
+
+```js
+let friendsAtYourParty = 0;
+friendsAtYourParty = friendsAtYourParty + 1;
+friendsAtYourParty = friendsAtYourParty + 1;
+friendsAtYourParty = friendsAtYourParty + 1;
+friendsAtYourParty = friendsAtYourParty + 1;
+friendsAtYourParty = friendsAtYourParty + 1;
+friendsAtYourParty = friendsAtYourParty + 1;
+friendsAtYourParty = friendsAtYourParty + 1;
+friendsAtYourParty = friendsAtYourParty + 1;
+friendsAtYourParty = friendsAtYourParty + 1;
+friendsAtYourParty = friendsAtYourParty + 1;
+console.log(friendsAtYourParty);
+```
+
+That's annoying though. I wish there was a better way. Before we explore that, let's chat about this example a tad more.
+
+We used `let` instead of `const`. Things that are `const cannot be reassigned later`. In general I find this be of minor help but others do not so I leave you to make your own judgement call. In general one should try to follow the `"principle of least power`." You should always choose the least powerful "thing" to accomplish whatever you're trying to do. Things with less power tend to be simpler and simple things are less prone to having or causing bugs. We instead use let here because you can see on the subsequent lines we do reassign friendsAtYourParty to be a different number. If you used const your code would crash because const won't let you do that. Thus here we use `let`. There's another one called `var` that is the **old** way of doing JavaScript. There are differences but I don't see a reason to use var at all anymore. It behaves more similar to let.
+
+Okay, so, we want to do this better, let's explore a few ways to do that using loops.
+
+```js
+let friendsAtYourParty = 0;
+while (friendsAtYourParty < 10) {
+  friendsAtYourParty = friendsAtYourParty + 1;
+}
+console.log(friendsAtYourParty);
+```
+
+**Output**:
+
+```text
+10
+```
+
+This is a **while loop**. The first part works similar to an if statement: as long as what's inside that statement is true `it will continue running and re-running the body (what's between the { })` until that statement is false. Once that statement is false, it'll break the loop and continue on. This case, we `add 1` to friendsAtYourParty until it's `10`, and then the next loop, when it's 10, it'll stop because 10 is not less than 10.
+
+**Infinite Loop**:
+
+```js
+let i = 0;
+
+while (true) {
+  i++;
+  console.log(i);
+}
+```
+
+Also, let's just show you a few shortcuts for adding one to a thing,
+
+```js
+let friendsAtYourParty = 0;
+friendsAtYourParty = friendsAtYourParty + 1;
+friendsAtYourParty += 1;
+friendsAtYourParty++;
+++friendsAtYourParty;
+console.log(friendsAtYourParty);
+```
+
+**For Loop**:
+
+```js
+let friendsAtYourParty = 0;
+for (let i = 0; i <= 10; i++) {
+  friendsAtYourParty += 1;
+}
+
+console.log(friendsAtYourParty);
+```
+
+#### Functions
+
+A function is a bit of re-usable code. Just how we like to re-use CSS classes, we love to re-use code. Let's start with an example:
+
+```js
+function addTwo(number) {
+  return number + 2;
+}
+
+const finalAnswer = addTwo(5);
+console.log(finalAnswer);
+```
+
+This isn't super useful but hopefully it shows you the mechanics of how a function works. We created a function called addTwo. This function takes in one parameter, number and it returns that number with 2 added to it. We can now use that addTwo function as much as we want! Let's make a something a bit more useful.
+
+```js
+function greet(firstName, lastName, honorific, greeting) {
+  return `${greeting} ${honorific} ${lastName}! I’m extremely pleased you could join us, ${firstName}! I hope you enjoy your stay, ${honorific} ${lastName}.`;
+}
+
+console.log(greet("Brian", "Holt", "Lord", "Salutations"));
+console.log(greet("Jack", "Sparrow", "Captain", "A-hoy"));
+```
+
+**Result**:
+
+```text
+"Salutations Lord Holt! I’m extremely pleased you could join us, Brian! I hope you enjoy your stay, Lord Holt."
+"A-hoy Captain Sparrow! I’m extremely pleased you could join us, Jack! I hope you enjoy your stay, Captain Sparrow."
+undefined
+```
+
+Note:
+
+```js
+function addTwo() {
+  return 10 + 2;
+}
+// return the function, not invoke the function
+const finalAnswer = addTwo;
+console.log(finalAnswer()); // now function is invoke
+```
+
+#### Scope
+
+```js
+const A = "A";
+let F;
+
+function doStuff(B) {
+  console.log(B); // works, B parameter is still in scope
+  const C = "C";
+  let H = "H";
+  if (1 + 1 === 2) {
+    const D = "D";
+    H = "something else";
+  }
+  console.log(D); // does not work, D was declared in that if statement block
+  console.log(H); // works, H was declared outside the if statement
+  F = "F";
+}
+
+let E = 0;
+while (E < 3) {
+  E++;
+  console.log(A); // works, the outter block (called the global scope) is still in scope
+  const G = "G";
+}
+console.log(E); // works, E was declared outside the whie loop
+console.log(G); // does not work, declared inside the while loop and it's over
+
+doStuff("B");
+console.log(B); // does not work, the B parameter expires after the function call
+console.log(C); // does not work, C was declared inside the function and the function is over
+console.log(F); // works, F was declared in the global scope
+```
+
+**Results**:
+
+```text
+"A"
+"A"
+"A"
+3
+ReferenceError: G is not defined
+```
+
+#### Builtins
+
+Lots of functions already exist for you! Smart people have created this commonly-used functions for things we often need. For example, say you have a string and you want to make everything lowercase, you can do this:
+
+```js
+const sentence = "ThIs HaS wEiRd CaSiNg On It";
+console.log(sentence.toLowerCase());
+```
+
+```text
+"this has weird casing on it"
+```
+
+Always be looking for the parent. And the best place to look all this stuff up is from our friends at Mozilla (makers of Firefox): the MDN. MDN used to stand for "Mozilla Developer Network" I think but now it's just synonymous with the documentation for the web. I literally look at this website several times a day. As I said before, you are not expected to remember everything. Looking things up on the MDN is not cheating.
+
+You can call `Math.round(5.1)` and it'll return that number `rounded (in this, 5).` You can use string.substr(indexToStart, howManyCharactersToInclude) to return part of a string. For example `const name = "Brian Holt"; console.log(name.substr(6, 3)) logs out "Hol" (remember numbering starts at 0).` We'll introduce them as we go but know there are a lot of them. You'll learn by doing.
+
+```js
+console.log(Math.round(5.1));
+
+const name = "Brian Holt";
+console.log(name.substr(6, 3));
+```
+
+### Objects
+
+So far we've talked about having one variable at a time: one first name, one last name, one price, etc. What if we have a collection of data? It'd be nice to group together like data. Good news! You can!
+
+```js
+const person = {
+  name: "Brian Holt",
+  city: "Seattle",
+  state: "WA",
+  favoriteFood: "🌮",
+  wantsTacosRightNow: true,
+  numberOfTacosWanted: 100,
+};
+console.log(person);
+console.log(person.name);
+console.log(person["name"]); // same as the line above; definitely prefer using the other one
+```
+
+**Result**:
+
+```text
+Object {
+  "city": "Seattle",
+  "favoriteFood": "🌮",
+  "name": "Brian Holt",
+  "numberOfTacosWanted": 100,
+  "state": "WA",
+  "wantsTacosRightNow": true,
+}
+"Brian Holt"
+"Brian Holt"
+undefined
+```
+
+This is called an **object**. They're `extremely useful in JavaScript`; they're how you'll group together like-information so that they can be used together. They contain a bunch of **keys** and **values**. The keys are on the left side of the `:` and represent how you get that piece data of out of the object. name is one such key, and the way I get the name of the.
+
+Used in conjunction with functions they're very powerful. Take this example:
+
+```js
+const person1 = {
+  name: "Brian",
+  ageRange: "25-35",
+};
+const person2 = {
+  name: "Jack",
+  ageRange: "65-75",
+};
+
+function suggestMusic(person) {
+  if (person.ageRange === "25-35") {
+    console.log("We think you'll like Daft Punk your crazy millenial.");
+  } else if (person.ageRange === "65-75") {
+    console.log(
+      "You're obviously going to like Johnny Cash. He walks the line."
+    );
+  } else {
+    console.log(
+      "Uh, maybe try David Bowie? Everyone likes David Bowie, right?"
+    );
+  }
+}
+
+suggestMusic(person1);
+suggestMusic(person2);
+```
+
+**Result**:
+
+```text
+"We think you\'ll like Daft Punk your crazy millennial."
+"You\'re obviously going to like Johnny Cash. He walks the line."
+undefined
+```
+
+Now we're able to pass all this information as one package which makes it easy to keep track of since we're just passing one variable. You'll see this become even more useful as we start integrating with servers and APIs.
+
+Objects can even have their functions! Let's see that.
+
+```js
+const dog = {
+  name: "dog",
+  speak() {
+    console.log("woof woof");
+  },
+};
+
+dog.speak();
+```
+
+#### Context
+
+```js
+const me = {
+  name: {
+    first: "Brian",
+    last: "Holt",
+  },
+  location: {
+    streetNumber: 500,
+    street: "Fakestreet",
+    city: "Seattle",
+    state: "WA",
+    zipCode: 55555,
+    country: "USA",
+  },
+  getAddress() {
+    return `${this.name.first} ${this.name.last}
+${this.location.streetNumber} ${this.location.street}
+${this.location.city}, ${this.location.state} ${this.location.zipCode}
+${this.location.country}`;
+  },
+};
+
+console.log(me.getAddress());
+```
+
+**Result**:
+
+```text
+"Brian Holt
+500 Fakestreet
+Seattle, WA 55555
+USA"
+```
+
+```js
+console.log(this === window); //true
+console.log(this.scrollY);
+console.log(window.scrollY);
+```
+
+#### Arrays
+
+```js
+const daysOfTheWeek = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+console.log(daysOfTheWeek);
+console.log(daysOfTheWeek[0]);
+console.log(daysOfTheWeek[1]);
+console.log(daysOfTheWeek[6]);
+```
+
+**Array Property Length**:
+
+```js
+const primeNumber = [2,3,5,7,11,13,17,19]
+
+console.log(primeNumber.length);
+```
+
+**Array Function Join()**:
+
+```js
+console.log(primeNumber.join('|'));
+```
+
+```js
+const courses = [
+    { teacher: "Kyle Simpson", course: "JS Function Lite" },
+    { teacher: "Sarah Drasner", course: "Intro to Vue" },
+    { teacher: "Brian Holt", course: "Complete Intro to React v3" },
+    { teacher: "Steve Kinney", course: "State Management" }
+  ];
+
+//   push()
+courses.push({teacher: "Md. Nahid Hassan", course: 'AI using Python'})
+console.log(courses);
+
+// change course instructor and course name from index 2 or 3rd row
+courses[2] = {teacher: "Mahin", course: 'Geometry'}
+console.log(courses);
+
+// change course name for teacher Nahid
+courses[4].course = 'Machine Learning using Python3'
+console.log(courses);
+
+// extract every element from the array
+
+// method -1 
+for (let i = 0; i < courses.length; i++) {
+    console.log(courses[i].course.toLocaleUpperCase() + ' Interested.......');
+}
+
+// method -2
+courses.forEach(function(course) {
+    console.log(course)
+});
+```
+
+#### Document Object Model(DOM)
+
+The **DOM** is the way that **JavaScript** interacts with HTML and CSS.
+
+**The DOM**:
+
+So far we've been writing code pretty well in a vacuum. We've been using console.log as the output mechanism. We haven't really done anything in JavaScript that couldn't be done in any other language. Now we're going to start using JavaScript to interact with your webpage.
+
+Let's first chat about what a browser is and how your code gets from you writing it to being on run in a browser.
+
+In a typical circumstance.
+
+- You write code in your editor (like VSCode)
+- You put your code on a server so that other people can get it
+- Someone visits your website
+  - (Lots of stuff happens here. For now we're not going to talk about it)
+  - Their browser makes a request to your server for your index.html
+  - Your server sends them a copy of the html
+  - The browser reads the HTML, sees you have a my-script.js script tag on there
+  - Browsers makes another request for my-script.js from your server
+  - Your server sends them a copy of my-script.js
+  - The browser reads the JavaScript code and begins executing the code
+
+Same **process** happens with **CSS** too.
+
+Okay, so this is how it works if you have put your code on some server like in a cloud like **Microsoft Azure**, **Amazon Web Services** or other places like **Bluehost** or **GoDaddy**. So how are we doing it locally, without a server, just on our computers? Your computer is basically faking this process. It's acting as both the server and the client so that it's easier for you to write code. When you open a file in your browser from your computer, your hard drive is the server. This was a point of confusion for me when starting so I'm sharing it with you.
+
