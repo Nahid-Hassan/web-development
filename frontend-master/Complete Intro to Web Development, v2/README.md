@@ -38,6 +38,11 @@
       - [Context](#context)
       - [Arrays](#arrays)
       - [Document Object Model(DOM)](#document-object-modeldom)
+      - [Events and Listeners](#events-and-listeners)
+      - [Event Delegation](#event-delegation)
+      - [JavaScript, HTML, and CSS Project](#javascript-html-and-css-project)
+    - [Using Ajax and Node.js](#using-ajax-and-nodejs)
+      - [Ajax](#ajax)
 
 ### Web Development Tools
 
@@ -1141,10 +1146,10 @@ function doStuff(B) {
 let E = 0;
 while (E < 3) {
   E++;
-  console.log(A); // works, the outter block (called the global scope) is still in scope
+  console.log(A); // works, the outer block (called the global scope) is still in scope
   const G = "G";
 }
-console.log(E); // works, E was declared outside the whie loop
+console.log(E); // works, E was declared outside the while loop
 console.log(G); // does not work, declared inside the while loop and it's over
 
 doStuff("B");
@@ -1339,7 +1344,7 @@ console.log(daysOfTheWeek[6]);
 **Array Property Length**:
 
 ```js
-const primeNumber = [2,3,5,7,11,13,17,19]
+const primeNumber = [2, 3, 5, 7, 11, 13, 17, 19];
 
 console.log(primeNumber.length);
 ```
@@ -1347,39 +1352,39 @@ console.log(primeNumber.length);
 **Array Function Join()**:
 
 ```js
-console.log(primeNumber.join('|'));
+console.log(primeNumber.join("|"));
 ```
 
 ```js
 const courses = [
-    { teacher: "Kyle Simpson", course: "JS Function Lite" },
-    { teacher: "Sarah Drasner", course: "Intro to Vue" },
-    { teacher: "Brian Holt", course: "Complete Intro to React v3" },
-    { teacher: "Steve Kinney", course: "State Management" }
-  ];
+  { teacher: "Kyle Simpson", course: "JS Function Lite" },
+  { teacher: "Sarah Drasner", course: "Intro to Vue" },
+  { teacher: "Brian Holt", course: "Complete Intro to React v3" },
+  { teacher: "Steve Kinney", course: "State Management" },
+];
 
 //   push()
-courses.push({teacher: "Md. Nahid Hassan", course: 'AI using Python'})
+courses.push({ teacher: "Md. Nahid Hassan", course: "AI using Python" });
 console.log(courses);
 
 // change course instructor and course name from index 2 or 3rd row
-courses[2] = {teacher: "Mahin", course: 'Geometry'}
+courses[2] = { teacher: "Mahin", course: "Geometry" };
 console.log(courses);
 
 // change course name for teacher Nahid
-courses[4].course = 'Machine Learning using Python3'
+courses[4].course = "Machine Learning using Python3";
 console.log(courses);
 
 // extract every element from the array
 
-// method -1 
+// method -1
 for (let i = 0; i < courses.length; i++) {
-    console.log(courses[i].course.toLocaleUpperCase() + ' Interested.......');
+  console.log(courses[i].course.toLocaleUpperCase() + " Interested.......");
 }
 
 // method -2
-courses.forEach(function(course) {
-    console.log(course)
+courses.forEach(function (course) {
+  console.log(course);
 });
 ```
 
@@ -1409,4 +1414,189 @@ In a typical circumstance.
 Same **process** happens with **CSS** too.
 
 Okay, so this is how it works if you have put your code on some server like in a cloud like **Microsoft Azure**, **Amazon Web Services** or other places like **Bluehost** or **GoDaddy**. So how are we doing it locally, without a server, just on our computers? Your computer is basically faking this process. It's acting as both the server and the client so that it's easier for you to write code. When you open a file in your browser from your computer, your hard drive is the server. This was a point of confusion for me when starting so I'm sharing it with you.
+
+**Example**:
+
+**HTML Part**:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./experiment-js-index.css" />
+    <title>JavaScript Experiments</title>
+  </head>
+  <body>
+    <h1 class="main-heading">JavaScript Experiments!</h1>
+
+    <ul>
+      <li class="js-target">Unchanged</li>
+      <li class="js-target">Unchanged</li>
+      <li>Won't Change</li>
+      <li class="js-target">Unchanged</li>
+      <li>Won't Change</li>
+      <li class="js-target">Unchanged</li>
+    </ul>
+
+    <script src="./experiment.js"></script>
+  </body>
+</html>
+```
+
+**CSS Part**:
+
+```css
+.main-heading {
+  color: red;
+}
+
+.js-target {
+  font-size: 20px;
+  color: green;
+}
+```
+
+**JavaScript Part**:
+
+```js
+// return everything that has class .js-target in one array object.
+const elementsToChange = document.querySelectorAll(".js-target");
+
+// Iteratively process every element that has .js-target class
+// method -1
+for (let i = 0; i < elementsToChange.length; i++) {
+  const currentElement = elementsToChange[i];
+  currentElement.innerText = "Modified by JavaScript";
+  currentElement.style.color = "red";
+}
+
+// method -2, less code, this the part of js functional programming
+// elementsToChange.forEach(function (element) {
+//     element.innerText = 'ForEach'
+// })
+```
+
+**Result**:
+
+![images](images/8.png)
+
+#### Events and Listeners
+
+We've been able to modify HTML and CSS using JavaScript using document. Awesome! We're going to go one step further and start involving the user. Web sites are meant to be reactive to users. In order to be reactive to them, we need to wait for them to do stuff, like **click** a button or **type** in an input. The way we do that is we wait for events to happen. An event is created every time certain events happens like when a user clicks something or when they type something. We respond to these events by having what are called event listeners. We give an event listener a function to run whenever an event happens. Let's take a look at responding to a click when a user clicks a button.
+
+**Button Example, `click` event**:
+
+```html
+<button class="event-button">Click Me</button>
+
+<script>
+  const button = document.querySelector(".event-button");
+  button.addEventListener("click", function () {
+    alert("Hey there!");
+  });
+</script>
+```
+
+Let's break it down.
+
+- We grab the button via `querySelector` and store it in the JavaScript variable button.
+- We then call the `addEventListener` method on the button. This takes two parameters (no need to memorize this, you can always look it up): the name of the event you want respond to, which in this case is the click event, and a function that is called whenever that event happens. This function is often called a callback because it gets called back whenever the event happens.
+- We then call a function called `alert`. alert is a super, super annoying function that pops up a dialog window with whatever you call it with.
+- People often get confused seeing }); on the last line. The first } is closing the function, the second ) is closing the function call of addEventListener, and the ; ends the statement.
+  Let's do another example with an input tag.
+
+**Input Example, `keyup` event**:
+
+```html
+<button class="event-button">Click Me</button>
+
+<br /><br />
+<input placeholder="type into me" class="input-to-copy" />
+<p class="p-to-copy-to">Nothing has happened yet.</p>
+
+<script>
+  const input = document.querySelector(".input-to-copy");
+  const paragraph = document.querySelector(".p-to-copy-to");
+
+  // also can use `keydown` event.
+  input.addEventListener("keyup", function () {
+    paragraph.innerText = input.value;
+  });
+</script>
+```
+
+Try typing into the input. You'll see whatever text you type into the input will instantly be reflected in the p tag. Pretty cool, right?
+
+- We're now using the **keyup** event. `This event happens whenever you release a key after pressing it`. As you may guess, there is a `keydown` event too that is fired whenever you press a key. We're using keyup because keydown happens before a key actually registers which means we would always be one key behind.
+- We're reference `input.value`. The value property of an input reflects whatever the user has typed into the input.
+- We're taking whatever is in input.value and passing that directly into the paragraph.innerText. Since that function is called every time a user types into the input, it keeps the two in sync!
+  One more example and then we'll move on.
+
+**`change` event**:
+
+```html
+<style>
+  .color-box {
+    background-color: limegreen;
+    width: 100px;
+    height: 100px;
+  }
+</style>
+<div class="color-box"></div>
+<input class="color-input" placeholder="Type a color here!" />
+<script>
+  const input = document.querySelector(".color-input");
+  const paragraph = document.querySelector(".color-box");
+
+  input.addEventListener("change", function () {
+    paragraph.style.backgroundColor = input.value;
+  });
+</script>
+```
+
+Similar to above. The key difference here is that we're listening for **change** events. change events happen whenever a user types something in the input and then **unfocused** the input by clicking somewhere else or hitting tab to change the focus. Try typing "red" and then clicking somewhere else. Also, try something that isn't a color. Notice that if you give it an invalid color it just doesn't change anything.
+
+#### Event Delegation
+
+If you have a bunch of elements that you need to listen for events on, you could attach an event listener to each but that's a bit tedious to do. Instead what is sometimes easier to do is to use what's called event bubbling. When event fires on an element, after that "bubbles" up to its parent, and then its parent, and its parent, etc. until it's at the root element.
+
+```html
+<h2>Event Delegation</h2>
+<div class="button-container">
+  <button>1</button>
+  <button>2</button>
+  <button>3</button>
+  <button>4</button>
+  <button>5</button>
+</div>
+<script>
+  document
+    .querySelector(".button-container")
+    .addEventListener("click", function (event) {
+      if (event.target.tagName === "BUTTON") {
+        alert(`You clicked on button ${event.target.innerText}`);
+      }
+    });
+</script>
+```
+
+You can see that we only bound event **listener**, and that was the div above it. Then, when we click the button, we're using the event parameter that is being passed into the callback. You may be wondering where that came from. It was always there, we just ignoring it. An event listener's first parameter is always an event object. There's lots of information on the event object but we're most concerned with `event.target`. target is the tag that the event originated from. In this case it'll be the button that caused the event. And we know that with tags you can use the `innerText` property to get the text inside of them. That's how we able to alert the correct number.
+
+#### JavaScript, HTML, and CSS Project
+
+See `./scripts-and-codes/calculator.*`
+
+
+### Using Ajax and Node.js
+
+#### Ajax
+
+Web development is full of stupid acronyms. AJAX is one of the worst offenders of this because it actually means something different than what it does. It stands for "asynchronous JavaScript and XML" which is not what it does. However it morphed and evolved and now it's the term that we use to represent what you do when a website requests more information from a server after the page has loaded.
+
+We're going to use AJAX to request data from an API (lol acronyms.) An API is application programming interface, but what we mean we say API in this context is it's a public server that will allow us to make AJAX calls and it will respond. Most big websites will have some sort of public API, like Twitter for example. There are many [public APIs](https://github.com/sdt-inc/public-apis).
+
+The API we're going to use is [dog.ceo](https://dog.ceo/dog-api/). It's a simple, silly API that will give you back random pictures of dogs. Awesome. Make a new project in your favorite editor, add an index.html with the following:
 
