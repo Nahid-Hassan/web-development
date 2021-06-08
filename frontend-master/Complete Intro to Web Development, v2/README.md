@@ -1,5 +1,7 @@
 # Complete Intro to Web Development, v2
 
+**Note**: [Course Resources Link](https://btholt.github.io/intro-to-web-dev-v2/)
+
 ## Table of Contents
 
 - [Complete Intro to Web Development, v2](#complete-intro-to-web-development-v2)
@@ -43,6 +45,9 @@
       - [JavaScript, HTML, and CSS Project](#javascript-html-and-css-project)
     - [Using Ajax and Node.js](#using-ajax-and-nodejs)
       - [Ajax](#ajax)
+    - [Learning Git](#learning-git)
+      - [Basic Git](#basic-git)
+      - [Using Gcithub](#using-gcithub)
 
 ### Web Development Tools
 
@@ -1600,3 +1605,20 @@ We're going to use AJAX to request data from an API (lol acronyms.) An API is ap
 
 The API we're going to use is [dog.ceo](https://dog.ceo/dog-api/). It's a simple, silly API that will give you back random pictures of dogs. Awesome. Make a new project in your favorite editor, add an index.html with the following:
 
+### Learning Git
+
+#### Basic Git
+
+```bash
+nahid@infoForest:~$ git init
+nahid@infoForest:~$ git add --all # or . or -A
+nahid@infoForest:~$ git commit -m 'write your commit message'
+nahid@infoForest:~$ git push origin master # push into the remote repo
+nahid@infoForest:~$ # git merge, checkout, branch, log etc..
+```
+
+#### Using Gcithub
+
+Create account on [Github](https://www.github.com/) and create repository and push you local repo into the remote repo.
+
+[Course Resources Link](https://btholt.github.io/intro-to-web-dev-v2/)
