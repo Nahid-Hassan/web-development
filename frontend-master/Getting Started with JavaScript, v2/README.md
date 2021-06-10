@@ -20,6 +20,11 @@
       - [NaN (~~Not a Number~~)](#nan-not-a-number)
       - [New](#new)
       - [Coercion (Convert One type to Another Type)](#coercion-convert-one-type-to-another-type)
+      - [Booleans](#booleans)
+      - [Scoping or Block Scoping](#scoping-or-block-scoping)
+    - [this and Prototypes System](#this-and-prototypes-system)
+      - [Prototypes](#prototypes)
+      - [Class](#class)
 
 ### Introduction
 
@@ -317,4 +322,204 @@ console.log(msg1 + numStudents + msg2);
 
 // type -2
 console.log(`There are ${numStudents} students.`);
+
+// function
+function addStudent(numStudents) {
+  return numStudents + 1;
+}
+
+// DOM return value/number as string
+// call addStudent()
+// Number(string) // convert string to a number
+addStudent(Number(studentsInputElem.value));
+// 12
 ```
+
+#### Booleans
+
+| Falsy     | Truthy           |
+| --------- | ---------------- |
+| ""        | "foo"            |
+| 0,-0      | 23               |
+| null      | {a: 1}           |
+| NaN       | [1,2]            |
+| false     | true             |
+| undefined | function() {...} |
+
+```js
+/**
+ * if (true) {
+ *  // this block of code execute
+ * }
+ */
+
+if (studentInputElem.value) {
+  numStudents = Number(studentsInputElem.value);
+}
+
+/**
+ * while (true) {
+ *  this block of code execute
+ * }
+ */
+
+while (newStudents.length) {
+  enrollStudent(newStudents.pop());
+}
+
+// !newStudents.length
+//------ both are same---
+// newStudents.length > 0
+
+// Note:
+
+// !false -> true
+// !!false -> false
+// !!!false -> true
+```
+
+![images](./images/1.png)
+
+#### Scoping or Block Scoping
+
+- `var`: function scoped variable.
+- `let, const (from ES6)`: block-scoped variable.
+
+**Example - 1**:
+
+```js
+let teacher = "Nahid";
+
+(function anotherTeacher() {
+  let teacher = "Mahin";
+  console.log(teacher); // Mahin
+})(); // immediately invoked
+
+console.log(teacher); // Mahin
+```
+
+**Example - 2**:
+
+Literately same as previous....**scoping**.
+
+```js
+let teacher = "Nahid";
+{
+  let teacher = "Mahin";
+  console.log(teacher);
+}
+
+console.log(teacher);
+```
+
+**Example - 3**:
+
+```js
+function formatStr(str) {
+  // prefix and rest only exist in this
+  // curly brace.
+  {
+    let prefix, rest;
+    prefix = str.slice(0, 3);
+    rest = str.slice(3);
+    str = prefix.toUpperCase() + rest;
+  }
+  // rest of the code
+}
+```
+
+### this and Prototypes System
+
+- A function's `this` references the execution context for that call. determined entirely by `how the function was called.`
+
+```js
+// example - 2
+let workshop = {
+  teacher: "Nahid",
+  ask(question) {
+    console.log(this.teacher, question);
+  },
+};
+
+/**
+ * None of the line is important, it is only important line
+ * workshop.ask(.....), this determined what the this keyword
+ * referred.
+ */
+
+// implicit binding
+workshop.ask("what is implicit binding");
+// Nahid what is implicit binding.
+```
+
+![images](./images/2.png)
+
+```js
+function ask(question) {
+  let teacher = "nahid";
+  // this.teacher is not nahid
+  // it is mahin
+  console.log(this.teacher, question);
+  console.log(teacher);
+  console.log(this.teacher);
+}
+
+function otherClass() {
+  var myContext = {
+    teacher: "mahin",
+  };
+  // explicit binding
+  ask.call(myContext, "why"); // call from here
+}
+
+otherClass();
+```
+
+#### Prototypes
+
+![images](images/3.png)
+
+```js
+function Workshop(teacher) {
+  this.teacher = teacher;
+  console.log(this.teacher);
+}
+
+Workshop.prototype.ask = function (question) {
+  console.log(this.teacher, question);
+};
+
+let deepJS = new Workshop("Nahid");
+let reactJS = new Workshop("Mahin");
+
+deepJS.ask("Something...");
+reactJS.ask("Anything...");
+
+console.log(reactJS.teacher); // lokkhipur
+console.log(deepJS.teacher); //
+```
+
+#### Class
+
+```js
+class Workshop {
+  constructor(teacher) {
+    this.teacher = teacher;
+    console.log(this.teacher);
+  }
+  ask(question) {
+    console.log(this.teacher, question);
+  }
+}
+
+let deepJS = new Workshop("Nahid");
+let reactJS = new Workshop("Mahin");
+
+deepJS.ask("Something...");
+reactJS.ask("Anything...");
+
+console.log(reactJS.teacher); // lokkhipur
+console.log(deepJS.teacher); //
+```
+
+> Prototype `system` is work like `class`
